@@ -28,7 +28,7 @@ export default function AboutSection({ onHover }: Props) {
           </p>
           <p>{site.about.experience}</p>
         </div>
-        <Signature eager className="about-signature" />
+        <Signature inView className="about-signature" />
       </div>
 
       <aside className="about-sidebar" aria-label="Services and contact">

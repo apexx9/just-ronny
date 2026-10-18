@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import type { Project } from "@/lib/content";
 
@@ -9,28 +9,62 @@ interface Props {
   onClose: () => void;
 }
 
+const FOCUSABLE =
+  'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
 export default function ProjectDialog({ project, onClose }: Props) {
+  const dialogRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (!project) return;
+    const dialog = dialogRef.current;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+
     const prev = document.documentElement.style.overflow;
     document.documentElement.style.overflow = "hidden";
     document.body.dataset.projectOpen = "true";
+
+    // Move focus into the dialog so keyboard users aren't left behind it.
+    dialog?.querySelector<HTMLElement>(".project-close")?.focus();
+
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
+      if (e.key === "Escape") {
+        onClose();
+        return;
+      }
+      if (e.key !== "Tab" || !dialog) return;
+
+      const items = Array.from(
+        dialog.querySelectorAll<HTMLElement>(FOCUSABLE)
+      ).filter((el) => el.offsetParent !== null || el === document.activeElement);
+      if (items.length === 0) return;
+
+      const first = items[0];
+      const last = items[items.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
+
     window.addEventListener("keydown", onKey);
     return () => {
       document.documentElement.style.overflow = prev;
       delete document.body.dataset.projectOpen;
       window.removeEventListener("keydown", onKey);
       window.dispatchEvent(new Event("portfolio:project-closed"));
+      previouslyFocused?.focus?.();
     };
   }, [project, onClose]);
 
   if (!project || typeof document === "undefined") return null;
 
   return createPortal(
-    <div className="project-dialog" role="dialog" aria-modal="true">
+    <div className="project-dialog" role="dialog" aria-modal="true" ref={dialogRef}>
       <div className="project-backdrop" onClick={onClose} aria-hidden="true" />
 
       <div className="project-sheet-position">

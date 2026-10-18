@@ -22,10 +22,9 @@ export default function ContactFooter({
   soundEnabled,
   toggleSound,
 }: Props) {
-  const [now, setNow] = useState<Date | null>(null);
+  const [now, setNow] = useState<Date | null>(() => new Date());
 
   useEffect(() => {
-    setNow(new Date());
     const id = setInterval(() => setNow(new Date()), 60_000);
     return () => clearInterval(id);
   }, []);
@@ -33,7 +32,7 @@ export default function ContactFooter({
   return (
     <footer
       data-analytics-section="contact"
-      id="contact"
+      id="footer"
       className="contact-footer"
       aria-label="Contact and social links"
     >

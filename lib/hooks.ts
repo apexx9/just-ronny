@@ -1,6 +1,20 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+
+const neverChanges = () => () => {};
+
+/**
+ * True only after hydration. Use to gate client-only trees without a
+ * setState-in-effect (which React flags and which cascades renders).
+ */
+export function useIsClient() {
+  return useSyncExternalStore(
+    neverChanges,
+    () => true,
+    () => false
+  );
+}
 
 /**
  * Drives the drawer navigation's `--nav-progress` CSS variable
@@ -96,7 +110,7 @@ export function useFooterGradient() {
 
   useEffect(() => {
     const surface = ref.current;
-    const footer = document.getElementById("contact");
+    const footer = document.getElementById("footer");
     if (!surface || !footer) return;
 
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");

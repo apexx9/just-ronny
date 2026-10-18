@@ -1,23 +1,21 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import IntroAnimation from "@/components/intro-animation";
 import Portfolio from "@/components/portfolio";
+import { useIsClient } from "@/lib/hooks";
 
 export default function HomePage() {
-  const [ready, setReady] = useState(false);
+  const isClient = useIsClient();
+  const [introDone, setIntroDone] = useState(false);
+  const handleIntroDone = useCallback(() => setIntroDone(true), []);
 
-  useEffect(() => {
-    setReady(true);
-  }, []);
-
-  if (!ready) return null;
+  if (!isClient) return <div className="boot" aria-hidden="true" />;
 
   return (
     <>
-      <IntroAnimation />
-      <Portfolio />
+      <IntroAnimation onComplete={handleIntroDone} />
+      <Portfolio introDone={introDone} />
     </>
   );
 }
-

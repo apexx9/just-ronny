@@ -1,6 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { site } from "@/lib/content";
+import { ThemeToggle } from "./theme-toggle";
 
 interface Props {
   navRef: React.RefObject<HTMLDivElement | null>;
@@ -60,9 +62,13 @@ export default function DrawerNavigation({ navRef, expanded, onHover }: Props) {
           <a className="desktop-nav" href="#information" onPointerEnter={onHover}>
             Information
           </a>
-          <a href="#contact" onPointerEnter={onHover}>
+          <a className="desktop-nav" href="#contact-form" onPointerEnter={onHover}>
             Contact
           </a>
+          <Link className="desktop-nav" href="/blog" onPointerEnter={onHover}>
+            Blog
+          </Link>
+          <ThemeToggle onPointerEnter={onHover} />
         </nav>
       </div>
     </div>

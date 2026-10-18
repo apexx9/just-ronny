@@ -11,6 +11,7 @@ import {
   type ReactNode,
 } from "react";
 import { createPortal } from "react-dom";
+import { useIsClient } from "@/lib/hooks";
 
 interface Ctx {
   activeId: string | null;
@@ -78,9 +79,7 @@ export function Tooltip({
   const tipRef = useRef<HTMLSpanElement>(null);
   const btnRef = useRef<HTMLButtonElement>(null);
   const [pos, setPos] = useState({ left: 0, top: 0 });
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
+  const mounted = useIsClient();
 
   useLayoutEffect(() => {
     if (!open || !btnRef.current) return;

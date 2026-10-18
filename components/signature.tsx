@@ -53,6 +53,10 @@ export default function Signature({
       setShown(true);
       return;
     }
+    // Observe a non-clipped ancestor: the span starts fully clipped by its
+    // initial clip-path, and Chromium's IntersectionObserver treats a fully
+    // clipped target as zero-area, so it would never report intersecting.
+    const target = node.parentElement ?? node;
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries.some((entry) => entry.isIntersecting)) {
@@ -62,7 +66,7 @@ export default function Signature({
       },
       { threshold: 0.35 },
     );
-    observer.observe(node);
+    observer.observe(target);
     return () => observer.disconnect();
   }, [shown, inView, eager]);
 

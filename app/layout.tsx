@@ -4,7 +4,6 @@ import { Geist } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { ThemeToggle } from "@/components/theme-toggle";
 
 /* ------------------------------------------------------------------ */
 /*  Fonts                                                             */
@@ -133,8 +132,9 @@ export const metadata: Metadata = {
 
   icons: {
     icon: [
-      { url: "/favicon-light-v2.png", media: "(prefers-color-scheme: light)" },
-      { url: "/favicon-dark-v2.png", media: "(prefers-color-scheme: dark)" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon-light-v3.png", media: "(prefers-color-scheme: light)" },
+      { url: "/favicon-dark-v3.png", media: "(prefers-color-scheme: dark)" },
       { url: "/favicon.ico" },
     ],
     shortcut: "/favicon.ico",
@@ -161,12 +161,16 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   viewportFit: "cover",
-  colorScheme: "light",
+  colorScheme: "light dark",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
     { media: "(prefers-color-scheme: dark)", color: "#0f0f0f" },
   ],
 };
+
+/* Runs before first paint so <html> already carries the right theme class.
+   Without this the app flashes light for a frame on every dark-mode load. */
+const themeInitScript = `(function(){try{var t=localStorage.getItem("theme");var d=t==="dark"||(t!=="light"&&window.matchMedia("(prefers-color-scheme: dark)").matches);var e=document.documentElement;e.classList.toggle("dark",d);e.style.colorScheme=d?"dark":"light";}catch(e){}})();`;
 
 /* ------------------------------------------------------------------ */
 /*  Root layout                                                       */
@@ -181,13 +185,10 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${geist.variable} ${aspekta.variable} ${signature.variable}`}
-      style={{
-        colorScheme: "light dark",
-        backgroundColor: "var(--background)",
-      }}
+      style={{ backgroundColor: "var(--background)" }}
       suppressHydrationWarning
     >
-      <body><ThemeProvider defaultTheme="system" storageKey="theme"><div className="theme-toggle-fixed"><ThemeToggle /></div>{children}</ThemeProvider></body>
+      <body><script dangerouslySetInnerHTML={{ __html: themeInitScript }} /><ThemeProvider defaultTheme="system" storageKey="theme">{children}</ThemeProvider></body>
     </html>
   );
 }

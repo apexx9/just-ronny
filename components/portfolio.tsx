@@ -1,42 +1,56 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import ContactFooter from "./contact-footer";
 import DrawerNavigation from "./drawer-navigation";
 import Hero from "./hero";
 import WorkSection from "./work-section";
+import ContactSection from "./contact-section";
+import { ThemeToggle } from "./theme-toggle";
 import { TooltipProvider } from "./tool-tip";
 import { useDrawer, useFooterGradient, useHoverSound } from "@/lib/hooks";
 
-export default function Portfolio() {
+interface Props {
+  introDone?: boolean;
+}
+
+export default function Portfolio({ introDone = true }: Props) {
   const { drawerRef, navigationRef, expanded } = useDrawer();
   const surfaceRef = useFooterGradient();
 
-  const [soundEnabled, setSoundEnabled] = useState(true);
+  /* Portfolio only mounts after hydration (the page gates it), so reading the
+     stored preference during the initial render is safe and avoids a
+     setState-in-effect. */
+  const [soundEnabled, setSoundEnabled] = useState(() => {
+    if (typeof window === "undefined") return true;
+    try {
+      return localStorage.getItem("aaron-sound") !== "false";
+    } catch {
+      return true;
+    }
+  });
+
   const playHover = useHoverSound(soundEnabled);
 
-  // Persist sound preference
-  useEffect(() => {
-    try {
-      const saved = localStorage.getItem("aaron-sound");
-      if (saved === "false") setSoundEnabled(false);
-    } catch {}
-  }, []);
-
   const toggleSound = () => {
-    setSoundEnabled((v) => {
-      try {
-        localStorage.setItem("aaron-sound", String(!v));
-      } catch {}
-      return !v;
-    });
+    const next = !soundEnabled;
+    try {
+      localStorage.setItem("aaron-sound", String(next));
+    } catch {}
+    setSoundEnabled(next);
   };
 
   return (
     <TooltipProvider>
       <div className="footer-gradient" aria-hidden="true" />
 
-      <main className={`portfolio ${expanded ? "drawer-expanded" : ""}`}>
+      {!expanded && <ThemeToggle variant="floating" onPointerEnter={playHover} />}
+
+      <main
+        className={`portfolio ${expanded ? "drawer-expanded" : ""} ${
+          introDone ? "intro-ready" : ""
+        }`}
+      >
         <div className="portfolio-stage">
           <Hero onHover={playHover} />
 
@@ -54,6 +68,7 @@ export default function Portfolio() {
 
             <div className="drawer-surface" ref={surfaceRef}>
               <WorkSection onHover={playHover} />
+              <ContactSection onHover={playHover} />
             </div>
           </section>
 

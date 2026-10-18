@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { site } from "@/lib/content";
 
 type Phase = "write" | "wipe" | "done";
@@ -32,6 +32,15 @@ export default function IntroAnimation({
   });
 
   const [phase, setPhase] = useState<Phase>("write");
+  const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+
+  const finish = useCallback(() => {
+    timers.current.forEach(clearTimeout);
+    timers.current = [];
+    setPhase("done");
+    if (oncePerSession) sessionStorage.setItem(storageKey, "true");
+    onComplete?.();
+  }, [oncePerSession, storageKey, onComplete]);
 
   useEffect(() => {
     if (!enabled) {
@@ -39,17 +48,16 @@ export default function IntroAnimation({
       return;
     }
 
-    const timers = [
+    timers.current = [
       setTimeout(() => setPhase("wipe"), WIPE_AT),
-      setTimeout(() => {
-        setPhase("done");
-        if (oncePerSession) sessionStorage.setItem(storageKey, "true");
-        onComplete?.();
-      }, DONE_AT),
+      setTimeout(finish, DONE_AT),
     ];
 
-    return () => timers.forEach(clearTimeout);
-  }, [enabled, onComplete, oncePerSession, storageKey]);
+    return () => {
+      timers.current.forEach(clearTimeout);
+      timers.current = [];
+    };
+  }, [enabled, finish, onComplete]);
 
   if (!enabled || phase === "done") return null;
 
@@ -60,7 +68,7 @@ export default function IntroAnimation({
       className="intro"
       role="presentation"
       aria-hidden="true"
-      onClick={() => setPhase("done")}
+      onClick={finish}
     >
       <motion.div
         className="intro-content"

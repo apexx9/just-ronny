@@ -34,17 +34,49 @@
 }
 
 :root {
+  /* Surfaces & ink */
   --background: #fff;
   --foreground: #202020;
-  --muted: #2020200f;
+  --editorial: #3c4142;
   --muted-foreground: #202020b0;
+  --body-muted: var(--body-muted);
+  --tertiary: #828b8c;
+  --showcase-ink: #111110;
+  --nav-muted: #202020b0;
+
+  /* Fills */
+  --muted: #2020200f;
+  --muted-hover: #20202017;
+  --muted-active: #2020201c;
+  --faint: #2020200a;
+  --faint-hover: #20202014;
+  --subtle: #eef1f1;
+  --subtle-hover: #f8f8f8;
+  --nav-hover: #2020201f;
+
+  /* Lines & overlays */
   --separator: #2020201a;
+  --separator-strong: #dfe4e4;
+  --cover-border: #9aa4a512;
+  --hairline: #20202040;
+  --overlay: #00000073;
+  --focus: #20202080;
   --selection: #2020201a;
-  --body-muted: #202020b0;
+  --primary-hover: #202020e6;
+
+  /* Chrome specific to this design */
   --nav-surface: linear-gradient(0deg, #2020201a, #2020201a), #ffffffbf;
   --drawer-shadow:
     0 -1px 3px -1.5px #2020200f, 0 -32px 32px #20202005,
     0 1px 3px -1.5px #2020200f, 0 32px 32px #20202005;
+  --hero-gradient: linear-gradient(
+    #20202000 0% 8.59%, #20202000 17.48%,
+    #20202001 26.53% 35.61%, #20202002 44.59% 53.34%,
+    #20202003 61.73% 69.63%, #20202004 76.9%,
+    #20202005 83.41%, #20202006 89.03%,
+    #20202007 93.63%, #20202008 97.08%,
+    #20202009 99.25%, #2020200a 100%
+  );
 
   color-scheme: light;
   font-family: var(--font-sans);
@@ -53,6 +85,50 @@
   -webkit-font-smoothing: antialiased;
   font-optical-sizing: auto;
   font-weight: 400;
+}
+
+.dark {
+  --background: #0f0f0f;
+  --foreground: #f5f5f5;
+  --editorial: #c5cbcb;
+  --muted-foreground: #f5f5f5b0;
+  --body-muted: #f5f5f5a8;
+  --tertiary: #8b9494;
+  --showcase-ink: #f5f5f5;
+  --nav-muted: #f5f5f5b0;
+
+  --muted: #f5f5f50f;
+  --muted-hover: #f5f5f517;
+  --muted-active: #f5f5f51c;
+  --faint: #f5f5f50a;
+  --faint-hover: #f5f5f514;
+  --subtle: #1c1f1f;
+  --subtle-hover: #161818;
+  --nav-hover: #f5f5f51f;
+
+  --separator: #f5f5f51a;
+  --separator-strong: #3a4040;
+  --cover-border: #9aa4a526;
+  --hairline: #f5f5f540;
+  --overlay: #000000a6;
+  --focus: #f5f5f580;
+  --selection: #f5f5f51a;
+  --primary-hover: #f5f5f5e6;
+
+  --nav-surface: linear-gradient(0deg, #f5f5f51a, #f5f5f51a), #0f0f0f80;
+  --drawer-shadow:
+    0 -1px 3px -1.5px #00000080, 0 -32px 32px #00000040,
+    0 1px 3px -1.5px #00000080, 0 32px 32px #00000040;
+  --hero-gradient: linear-gradient(
+    #f5f5f500 0% 8.59%, #f5f5f500 17.48%,
+    #f5f5f501 26.53% 35.61%, #f5f5f502 44.59% 53.34%,
+    #f5f5f503 61.73% 69.63%, #f5f5f504 76.9%,
+    #f5f5f505 83.41%, #f5f5f506 89.03%,
+    #f5f5f507 93.63%, #f5f5f508 97.08%,
+    #f5f5f509 99.25%, #f5f5f50a 100%
+  );
+
+  color-scheme: dark;
 }
 
 *,
@@ -93,7 +169,7 @@ button {
 
 button:focus-visible,
 a:focus-visible {
-  outline: 2px solid #20202080;
+  outline: 2px solid var(--focus);
   outline-offset: 4px;
 }
 
@@ -122,7 +198,7 @@ a:focus-visible {
    ============================================================ */
 .intro {
   z-index: 100;
-  background: #fff;
+  background: var(--background);
   place-items: center;
   display: grid;
   position: fixed;
@@ -132,7 +208,7 @@ a:focus-visible {
 }
 
 .intro-content {
-  color: #202020;
+  color: var(--foreground);
   justify-items: center;
   gap: clamp(4px, 1.5vw, 16px);
   display: grid;
@@ -140,7 +216,7 @@ a:focus-visible {
 }
 
 .intro-name {
-  color: #202020;
+  color: var(--foreground);
   font-family: var(--font-signature), "Segoe Script", cursive;
   font-size: clamp(44px, 13vw, 104px);
   font-weight: 400;
@@ -153,7 +229,7 @@ a:focus-visible {
 
 .intro-wipe {
   pointer-events: none;
-  background: #fff;
+  background: var(--background);
   position: absolute;
   inset: 0;
 }
@@ -162,15 +238,8 @@ a:focus-visible {
    HERO
    ============================================================ */
 .hero {
-  background-color: #fff;
-  background-image: linear-gradient(
-    #20202000 0% 8.59%, #20202000 17.48%,
-    #20202001 26.53% 35.61%, #20202002 44.59% 53.34%,
-    #20202003 61.73% 69.63%, #20202004 76.9%,
-    #20202005 83.41%, #20202006 89.03%,
-    #20202007 93.63%, #20202008 97.08%,
-    #20202009 99.25%, #2020200a 100%
-  );
+  background-color: var(--background);
+  background-image: var(--hero-gradient);
   justify-content: center;
   align-items: center;
   height: calc(100dvh - 128px);
@@ -198,7 +267,7 @@ a:focus-visible {
 .hero-title .personal-name { color: var(--foreground); }
 
 .hero-role {
-  color: #202020a8;
+  color: var(--body-muted);
   margin-top: 12px;
   font-size: clamp(15px, 3.6vw, 19px);
   font-weight: 450;
@@ -207,7 +276,7 @@ a:focus-visible {
 }
 
 .hero-tagline {
-  color: #202020a8;
+  color: var(--body-muted);
   max-width: 46ch;
   margin-top: 18px;
   font-size: clamp(15px, 3.4vw, 17px);
@@ -215,7 +284,7 @@ a:focus-visible {
 }
 
 .hero-meta {
-  color: #202020a8;
+  color: var(--body-muted);
   flex-wrap: wrap;
   align-items: center;
   gap: 8px;
@@ -227,20 +296,7 @@ a:focus-visible {
 
 .hero-status { align-items: center; gap: 7px; display: inline-flex; }
 
-.hero-status-dot {
-  background: #2fb75c;
-  border-radius: 50%;
-  width: 7px;
-  height: 7px;
-  box-shadow: 0 0 0 3px #2fb75c26;
-  animation: status-pulse 2.4s ease-in-out infinite;
-}
-@keyframes status-pulse {
-  0%, 100% { box-shadow: 0 0 0 3px #2fb75c26; }
-  50% { box-shadow: 0 0 0 5px #2fb75c1a; }
-}
-
-.hero-meta-sep { color: #20202040; }
+.hero-meta-sep { color: var(--hairline); }
 
 .hero-actions {
   align-items: center;
@@ -250,14 +306,14 @@ a:focus-visible {
   display: flex;
 }
 
-.hero-actions > a { color: #000; }
-.hero-actions > a svg { color: #202020b0; }
+.hero-actions > a { color: var(--foreground); }
+.hero-actions > a svg { color: var(--muted-foreground); }
 
 .pill-button {
   height: 30px;
   color: var(--foreground);
   white-space: nowrap;
-  background: #2020200f;
+  background: var(--muted);
   border-radius: 999px;
   justify-content: center;
   align-items: center;
@@ -271,7 +327,7 @@ a:focus-visible {
   display: inline-flex;
 }
 .pill-button:active { transform: scale(0.95); }
-.pill-button:not(.primary-button):active { background: #2020201c; }
+.pill-button:not(.primary-button):active { background: var(--muted-active); }
 
 .primary-button {
   background: var(--foreground);
@@ -290,13 +346,12 @@ a:focus-visible {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .pill-button:hover { background: #20202017; }
-  .primary-button:hover { background: #202020e6; }
+  .pill-button:hover { background: var(--muted-hover); }
+  .primary-button:hover { background: var(--primary-hover); }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .pill-button, .copy-label { transition: none; animation: none; }
-  .hero-status-dot { animation: none; }
 }
 
 /* ============================================================
@@ -305,10 +360,10 @@ a:focus-visible {
 .showcase {
   z-index: 2;
   position: relative;
-  --foreground: #111110;
-  --muted-foreground: #828b8c;
-  --body-muted: #828b8c;
-  --muted: #eef1f1;
+  --foreground: var(--showcase-ink);
+  --muted-foreground: var(--tertiary);
+  --body-muted: var(--tertiary);
+  --muted: var(--subtle);
 }
 
 .drawer-expanded .hero { visibility: hidden; }
@@ -319,7 +374,7 @@ a:focus-visible {
   border-radius: 24px 24px var(--footer-radius, 0px) var(--footer-radius, 0px);
   min-height: 120svh;
   box-shadow: var(--drawer-shadow);
-  background: #fff;
+  background: var(--background);
   overflow: hidden;
   transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1),
     border-radius 0.5s cubic-bezier(0.22, 1, 0.36, 1);
@@ -335,7 +390,7 @@ a:focus-visible {
   font-size: 14px;
   font-weight: 400;
   line-height: 1.75;
-  color: #3c4142;
+  color: var(--editorial);
 }
 
 @media (min-width: 640px) {
@@ -347,8 +402,8 @@ a:focus-visible {
    DRAWER NAVIGATION
    ============================================================ */
 .drawer-navigation {
-  color: #000;
-  --muted-foreground: #202020b0;
+  color: var(--foreground);
+  --muted-foreground: var(--nav-muted);
   --nav-progress: 0;
   --nav-expanded-width: min(488px, calc(100vw - 64px));
   z-index: 20;
@@ -451,10 +506,10 @@ a:focus-visible {
 
 @media (hover: hover) and (pointer: fine) {
   .drawer-navigation:not(.is-expanded):has(.drawer-handle:hover) {
-    background-color: #2020201f;
+    background-color: var(--nav-hover);
     scale: 1.05;
   }
-  .navigation-content a:hover { color: #202020; }
+  .navigation-content a:hover { color: var(--foreground); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -502,7 +557,7 @@ a:focus-visible {
   content: "";
   z-index: -1;
   opacity: 0;
-  background: #f8f8f8;
+  background: var(--subtle-hover);
   border-radius: 16px;
   transition: opacity 0.25s ease-out;
   position: absolute;
@@ -510,8 +565,8 @@ a:focus-visible {
 }
 
 .project-cover {
-  background: #eef1f1;
-  border: 1px solid #9aa4a512;
+  background: var(--subtle);
+  border: 1px solid var(--cover-border);
   border-radius: 12px;
   overflow: hidden;
 }
@@ -526,7 +581,7 @@ a:focus-visible {
 
 .project-title {
   font-size: inherit;
-  color: #3c4142;
+  color: var(--editorial);
   flex-wrap: wrap;
   align-items: baseline;
   column-gap: 4px;
@@ -537,7 +592,7 @@ a:focus-visible {
 }
 
 .project-discipline {
-  color: #828b8c;
+  color: var(--tertiary);
   font-weight: 400;
 }
 
@@ -585,7 +640,7 @@ a:focus-visible {
 .project-dialog::backdrop { background: transparent; }
 
 .project-backdrop {
-  background: #00000073;
+  background: var(--overlay);
   position: absolute;
   inset: 0;
 }
@@ -597,7 +652,7 @@ a:focus-visible {
 
 .project-sheet {
   transform-origin: 0 0;
-  background: #fff;
+  background: var(--background);
   border-radius: 20px;
   position: absolute;
   inset: 0;
@@ -612,7 +667,7 @@ a:focus-visible {
 
 .project-controls {
   pointer-events: none;
-  background: #fff;
+  background: var(--background);
   height: 48px;
   position: absolute;
   inset: 0 0 auto;
@@ -632,7 +687,7 @@ a:focus-visible {
 }
 .project-sheet-handle::after {
   content: "";
-  background: #dfe4e4;
+  background: var(--separator-strong);
   border-radius: 999px;
   width: 40px;
   height: 4px;
@@ -643,7 +698,7 @@ a:focus-visible {
 
 .project-close {
   pointer-events: auto;
-  background: #2020200a;
+  background: var(--faint);
   width: 40px;
   height: 40px;
   position: absolute;
@@ -654,7 +709,7 @@ a:focus-visible {
   align-items: center;
   justify-content: center;
 }
-.project-close:hover { background: #20202014; }
+.project-close:hover { background: var(--faint-hover); }
 
 .project-scroll {
   overscroll-behavior: contain;
@@ -676,7 +731,7 @@ a:focus-visible {
 }
 
 .project-heading h2 {
-  color: #3c4142;
+  color: var(--editorial);
   font-size: 21px;
   font-weight: 400;
   line-height: 29px;
@@ -693,7 +748,7 @@ a:focus-visible {
 .project-lead { margin-top: 16px; }
 
 .media-caption {
-  color: #828b8c;
+  color: var(--tertiary);
   margin-top: 12px;
   font-size: 12px;
   line-height: 18px;
@@ -707,7 +762,7 @@ a:focus-visible {
   line-height: 20px;
   display: flex;
 }
-.project-facts dt { color: #828b8c; }
+.project-facts dt { color: var(--tertiary); }
 .project-facts > div { display: grid; gap: 2px; }
 
 .case-story {
@@ -719,21 +774,21 @@ a:focus-visible {
   display: grid;
 }
 .case-story h3 {
-  color: #3c4142;
+  color: var(--editorial);
   margin-bottom: 12px;
   font-size: 14px;
   font-weight: 500;
   line-height: 20px;
 }
 .case-story h4 {
-  color: #3c4142;
+  color: var(--editorial);
   margin-bottom: 8px;
   font-weight: 500;
 }
 
 .workflow-model {
-  background: #eef1f1;
-  border: 1px solid #9aa4a512;
+  background: var(--subtle);
+  border: 1px solid var(--cover-border);
   border-radius: 12px;
   margin-top: 24px;
   padding: 20px;
@@ -747,8 +802,8 @@ a:focus-visible {
   display: flex;
 }
 .workflow-number {
-  color: #828b8c;
-  border: 1px solid #2020201a;
+  color: var(--tertiary);
+  border: 1px solid var(--separator);
   border-radius: 50%;
   flex-shrink: 0;
   place-items: center;
@@ -764,10 +819,10 @@ a:focus-visible {
   gap: 12px;
   display: grid;
 }
-.decision-number { color: #828b8c; font-size: 12px; }
+.decision-number { color: var(--tertiary); font-size: 12px; }
 
 .case-source-link {
-  color: #3c4142;
+  color: var(--editorial);
   text-underline-offset: 3px;
   text-decoration: underline;
   text-decoration-thickness: 1px;
@@ -782,7 +837,7 @@ a:focus-visible {
    The clip-path reveal itself is driven by framer-motion inline.
    ============================================================ */
 .signature {
-  color: #000;
+  color: var(--foreground);
   font-family: var(--font-signature), "Segoe Script", cursive;
   font-size: clamp(30px, 8vw, 44px);
   font-weight: 400;
@@ -807,13 +862,13 @@ a:focus-visible {
   display: grid;
 }
 .about-section .section-label { margin-bottom: 16px; }
-.about-prose { color: #3c4142; gap: 24px; display: grid; }
+.about-prose { color: var(--editorial); gap: 24px; display: grid; }
 .about-location, .about-services li { white-space: nowrap; }
 .about-sidebar { align-content: start; gap: 24px; display: grid; }
-.about-services { color: #3c4142; gap: 4px; display: grid; }
+.about-services { color: var(--editorial); gap: 4px; display: grid; }
 
 .about-link {
-  color: #3c4142;
+  color: var(--editorial);
   text-decoration: underline;
   text-decoration-color: var(--separator);
   text-underline-offset: 4px;
@@ -977,130 +1032,239 @@ a:focus-visible {
     border-radius 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Theme toggle - minimal */
-.theme-toggle-fixed {
-  position: fixed;
-  top: 12px;
-  right: 12px;
-  z-index: 60;
-}
-
+/* ============================================================
+   THEME TOGGLE (lives in the drawer navigation)
+   ============================================================ */
 .theme-toggle {
-  width: 36px;
-  height: 36px;
-  padding: 0;
+  height: 24px;
+  padding: 0 5px;
+  border-radius: 999px;
+  color: var(--nav-muted);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  border-radius: 9999px;
-  background: var(--muted);
-  border: 1px solid var(--separator);
-  color: var(--foreground);
-  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+.theme-toggle svg {
+  width: 15px;
+  height: 15px;
+}
+@media (hover: hover) and (pointer: fine) {
+  .theme-toggle:hover {
+    color: var(--foreground);
+    background: var(--nav-hover);
+  }
 }
 
-.theme-toggle:hover {
-  background: var(--separator);
-}
-
-.theme-icon {
-  width: 16px;
-  height: 16px;
-}
-
-/* Dark mode */
-.dark {
-  --background: #0f0f0f;
-  --foreground: #f5f5f5;
-  --muted: #f5f5f50f;
-  --muted-foreground: #f5f5f5b0;
-  --separator: #f5f5f51a;
-  --selection: #f5f5f51a;
-  --body-muted: #f5f5f5b0;
-  --nav-surface: linear-gradient(0deg, #f5f5f51a, #f5f5f51a), #0f0f0f80;
-  --drawer-shadow:
-    0 -1px 3px -1.5px #00000080, 0 -32px 32px #00000040,
-    0 1px 3px -1.5px #00000080, 0 32px 32px #00000040;
-}
-
-.dark body {
-  background: var(--background);
-  color: var(--foreground);
-}
-
-.dark .intro {
-  background: #0f0f0f;
-}
-
-.dark .intro-content,
-.dark .intro-name,
-.dark .intro-wipe {
-  color: #f5f5f5;
-}
-
-.dark .intro-wipe {
-  background: #0f0f0f;
-}
-
-.dark .hero {
-  background-color: #0f0f0f;
-  background-image: linear-gradient(
-    #f5f5f500 0% 8.59%, #f5f5f500 17.48%,
-    #f5f5f501 26.53% 35.61%, #f5f5f502 44.59% 53.34%,
-    #f5f5f503 61.73% 69.63%, #f5f5f504 76.9%,
-    #f5f5f505 83.41%, #f5f5f506 89.03%,
-    #f5f5f507 93.63%, #f5f5f508 97.08%,
-    #f5f5f509 99.25%, #f5f5f50a 100%
-  );
-}
-
-.dark .hero-title,
-.dark .hero-title .personal-name,
-.dark .hero-role,
-.dark .hero-tagline,
-.dark .hero-meta,
-.dark .hero-status {
-  color: var(--foreground);
-}
-
-.dark .pill-button {
-  color: var(--foreground);
-  border-color: var(--separator);
-  background: transparent;
-}
-
-.dark .pill-button:hover {
-  background: var(--muted);
-}
-
-.dark .drawer-navigation {
+/* Floating variant — shown over the hero while the drawer nav is collapsed,
+   so the theme is reachable before you scroll into the showcase. Matches the
+   nav pill's surface so it reads as the same piece of chrome. */
+.theme-toggle--floating {
+  position: fixed;
+  top: calc(16px + env(safe-area-inset-top));
+  right: 16px;
+  z-index: 60;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  color: var(--muted-foreground);
   background: var(--nav-surface);
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
   box-shadow: var(--drawer-shadow);
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
+  animation: toggle-in 0.4s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+@media (hover: hover) and (pointer: fine) {
+  .theme-toggle--floating:hover {
+    color: var(--foreground);
+    background: var(--nav-surface);
+    scale: 1.05;
+  }
+}
+@keyframes toggle-in {
+  from { opacity: 0; transform: translateY(-6px) scale(0.9); }
+  to   { opacity: 1; transform: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-toggle--floating { animation: none; }
+  .theme-toggle--floating:hover { scale: 1; }
 }
 
-.dark .drawer-handle {
-  background: var(--muted-foreground);
-  box-shadow: none;
+/* Post-intro hero reveal — the intro overlay wipes away, then the hero copy
+   rises in a short stagger. Guarded so reduced-motion users see it instantly. */
+@media (prefers-reduced-motion: no-preference) {
+  .portfolio:not(.intro-ready) .hero-title,
+  .portfolio:not(.intro-ready) .hero-tagline,
+  .portfolio:not(.intro-ready) .hero-meta,
+  .portfolio:not(.intro-ready) .hero-actions {
+    opacity: 0;
+  }
+  .portfolio.intro-ready .hero-title,
+  .portfolio.intro-ready .hero-tagline,
+  .portfolio.intro-ready .hero-meta,
+  .portfolio.intro-ready .hero-actions {
+    animation: hero-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+  }
+  .portfolio.intro-ready .hero-title { animation-delay: 0.05s; }
+  .portfolio.intro-ready .hero-tagline { animation-delay: 0.14s; }
+  .portfolio.intro-ready .hero-meta { animation-delay: 0.23s; }
+  .portfolio.intro-ready .hero-actions { animation-delay: 0.32s; }
+}
+@keyframes hero-rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: none; }
 }
 
-.dark .navigation-name,
-.dark .desktop-nav,
-.dark nav a {
-  color: var(--foreground);
-}
-
-.dark .about-section,
-.dark .work-section,
-.dark .contact-footer,
-.dark .project-card,
-.dark .project-dialog {
+/* Pre-hydration placeholder — keeps the page from flashing empty. */
+.boot {
+  min-height: 100dvh;
   background: var(--background);
-  color: var(--foreground);
 }
 
-.dark .signature-mark,
-.dark .signature-text {
+/* Brief cross-fade when the user flips the theme, added by the provider.
+   Deliberately scoped to the switching moment so hover transitions stay snappy. */
+.theme-switching,
+.theme-switching *,
+.theme-switching *::before,
+.theme-switching *::after {
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease, fill 0.3s ease, stroke 0.3s ease,
+    outline-color 0.3s ease !important;
+}
+@media (prefers-reduced-motion: reduce) {
+  .theme-switching,
+  .theme-switching *,
+  .theme-switching *::before,
+  .theme-switching *::after {
+    transition: none !important;
+  }
+}
+
+
+/* ============================================================
+   CONTACT FORM
+   ============================================================ */
+.contact-form-section {
+  border-bottom: 1px solid var(--separator);
+  width: 100%;
+  margin-block: 20px;
+  padding-bottom: 60px;
+  scroll-margin-top: 96px;
+  display: grid;
+  gap: 16px;
+}
+.contact-form-section .section-label { margin-bottom: 4px; }
+.contact-form-intro { color: var(--editorial); }
+.contact-form { display: grid; gap: 16px; }
+.form-row { display: grid; gap: 16px; }
+.form-field { display: grid; gap: 8px; }
+.form-label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted-foreground);
+}
+.form-input,
+.form-textarea {
+  width: 100%;
+  background: var(--faint);
+  border: 1px solid var(--separator);
+  border-radius: 8px;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.5;
   color: var(--foreground);
+  transition: border-color 0.15s, background-color 0.15s;
+}
+.form-textarea { min-height: 120px; resize: vertical; }
+.form-input::placeholder,
+.form-textarea::placeholder { color: var(--hairline); }
+.form-input:focus-visible,
+.form-textarea:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-color: transparent;
+}
+@media (min-width: 640px) {
+  .form-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 16px;
+}
+.form-submit { padding: 0 14px; }
+.form-mailto { font-size: 14px; }
+.form-status { font-size: 14px; }
+.form-success { color: var(--foreground); }
+.form-error { color: var(--muted-foreground); }
+@media (hover: hover) and (pointer: fine) {
+  .form-input:hover,
+  .form-textarea:hover { background: var(--faint-hover); }
+}
+
+/* ============================================================
+   BLOG
+   ============================================================ */
+.blog-page,
+.blog-post-page { min-height: 100svh; }
+.blog-header { display: grid; gap: 12px; margin-bottom: 24px; }
+.blog-title { margin-bottom: 0; }
+.blog-intro { color: var(--editorial); }
+.blog-back { justify-self: start; margin-bottom: 4px; }
+.blog-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
+.blog-item {
+  border-top: 1px solid var(--separator);
+}
+.blog-item:last-child { border-bottom: 1px solid var(--separator); }
+.blog-item-link {
+  display: grid;
+  gap: 8px;
+  padding: 20px 0;
+  text-decoration: none;
+  color: inherit;
+  transition: background-color 0.15s;
+}
+.blog-item-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--muted-foreground);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.blog-sep { color: var(--hairline); }
+.blog-item-title {
+  font-size: 16px;
+  line-height: 1.4;
+  font-weight: 500;
+  color: var(--foreground);
+}
+.blog-item-summary { color: var(--editorial); }
+.blog-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.blog-tag {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: var(--muted);
+  color: var(--muted-foreground);
+  border: 1px solid var(--separator);
+}
+.blog-post-header { display: grid; gap: 12px; margin-bottom: 24px; }
+.blog-post-title {
+  font-size: clamp(24px, 5vw, 36px);
+  line-height: 1.15;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+}
+.blog-article { display: grid; gap: 16px; color: var(--editorial); }
+.blog-post-footer { margin-top: 32px; }
+@media (hover: hover) and (pointer: fine) {
+  .blog-item-link:hover { background: var(--faint); }
 }

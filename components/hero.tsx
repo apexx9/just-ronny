@@ -37,10 +37,7 @@ export default function Hero({ onHover }: HeroProps) {
         <p className="hero-tagline">{site.heroTagline}</p>
 
         <p className="hero-meta">
-          <span className="hero-status">
-            <span className="hero-status-dot" aria-hidden="true" />
-            {site.availability}
-          </span>
+          <span className="hero-status">{site.availability}</span>
           <span aria-hidden="true" className="hero-meta-sep">
             ·
           </span>
