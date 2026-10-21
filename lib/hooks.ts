@@ -24,6 +24,9 @@ export function useDrawer() {
   const drawerRef = useRef<HTMLDivElement>(null);
   const navigationRef = useRef<HTMLDivElement>(null);
   const [expanded, setExpanded] = useState(false);
+  /* Set by `collapse()` (a mobile nav link was tapped) so the scroll-driven
+     drawer stays shut until the user scrolls back above the showcase. */
+  const manualRef = useRef(false);
 
   useEffect(() => {
     const drawer = drawerRef.current;
@@ -62,7 +65,11 @@ export function useDrawer() {
 
     const onScroll = () => {
       if (document.body.dataset.projectOpen !== undefined) return;
-      const next = drawer.getBoundingClientRect().top <= 0 ? 1 : 0;
+      const atTop = drawer.getBoundingClientRect().top <= 0;
+      // Release a manual collapse once the user scrolls back above the
+      // showcase, so normal scroll-driven expansion resumes.
+      if (manualRef.current && !atTop) manualRef.current = false;
+      const next = manualRef.current ? 0 : atTop ? 1 : 0;
       if (next !== target) {
         target = next;
         setExpanded(next === 1);
@@ -98,7 +105,18 @@ export function useDrawer() {
     };
   }, []);
 
-  return { drawerRef, navigationRef, expanded };
+  const collapse = () => {
+    manualRef.current = true;
+    setExpanded(false);
+  };
+
+  /* Clear a manual collapse (the drawer handle was pulled) so the next
+     scroll event can expand the pill again. */
+  const expand = () => {
+    manualRef.current = false;
+  };
+
+  return { drawerRef, navigationRef, expanded, collapse, expand };
 }
 
 /**

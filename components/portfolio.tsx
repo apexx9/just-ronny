@@ -14,7 +14,7 @@ interface Props {
 }
 
 export default function Portfolio({ introDone = true }: Props) {
-  const { drawerRef, navigationRef, expanded } = useDrawer();
+  const { drawerRef, navigationRef, expanded, expand } = useDrawer();
   const surfaceRef = useFooterGradient();
 
   return (
@@ -37,7 +37,11 @@ export default function Portfolio({ introDone = true }: Props) {
             ref={drawerRef}
             aria-label="Selected work"
           >
-            <DrawerNavigation navRef={navigationRef} expanded={expanded} />
+            <DrawerNavigation
+              navRef={navigationRef}
+              expanded={expanded}
+              onExpand={expand}
+            />
 
             <div className="drawer-surface" ref={surfaceRef}>
               <WorkSection />

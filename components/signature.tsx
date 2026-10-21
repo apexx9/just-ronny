@@ -24,8 +24,8 @@ interface SignatureProps {
 }
 
 /* A pen speeds up in the middle and eases out at the end — a left-to-right
-   ink wipe reads as handwriting without breaking Sacramento's connecting
-   strokes the way a per-letter reveal would. */
+   ink wipe reads as handwriting without breaking the signature font's
+   connecting strokes the way a per-letter reveal would. */
 const WRITE_EASE = [0.63, 0.01, 0.26, 1] as const;
 const HIDDEN = { clipPath: "inset(0% 100% 0% 0%)" };
 const SHOWN = { clipPath: "inset(0% 0% 0% 0%)" };

@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -13,10 +14,14 @@ const timeFmt = new Intl.DateTimeFormat("en-CA", {
 });
 
 export default function ContactFooter() {
-  const [now, setNow] = useState<Date | null>(() => new Date());
+  const [now, setNow] = useState<Date | null>(null);
 
   useEffect(() => {
-    const id = setInterval(() => setNow(new Date()), 60_000);
+    const updateTime = () => setNow(new Date());
+
+    updateTime();
+
+    const id = setInterval(updateTime, 60_000);
     return () => clearInterval(id);
   }, []);
 
@@ -31,44 +36,64 @@ export default function ContactFooter() {
         <div className="footer-copy">
           <p className="footer-location">
             Right now I&apos;m in {site.location}, where it&apos;s{" "}
-            <time dateTime={now?.toISOString()} suppressHydrationWarning>
+            <time
+              dateTime={now?.toISOString()}
+              suppressHydrationWarning
+            >
               {now ? timeFmt.format(now) : "—"}
             </time>
           </p>
+
           <p className="footer-socials">
             You can also find me on
-            {site.socials.map((s) =>
-              s.id === "instagram" ? (
-                <HoverCard key={s.id} content={<InstagramCard />}>
-                  <a
-                    className="footer-link"
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {s.label}
-                  </a>
-                </HoverCard>
-              ) : (
+            {site.socials.map((social) => {
+              const link = (
                 <a
-                  key={s.id}
                   className="footer-link"
-                  href={s.href}
+                  href={social.href}
                   target="_blank"
                   rel="noopener noreferrer"
+                  aria-label={
+                    social.id === "instagram"
+                      ? "View Instagram profile"
+                      : undefined
+                  }
                 >
-                  {s.label}
+                  {social.label}
                 </a>
-              )
-            )}
-            or
-            <a className="footer-link" href={site.contactHref}>
+              );
+
+              return (
+                <span
+                  key={social.id}
+                  className="footer-social-item"
+                >
+                  {" "}
+                  {social.id === "instagram" ? (
+                    <HoverCard
+                      content={<InstagramCard />}
+                      className="instagram-hover-surface"
+                    >
+                      {link}
+                    </HoverCard>
+                  ) : (
+                    link
+                  )}
+                </span>
+              );
+            })}{" "}
+            or{" "}
+            <a
+              className="footer-link"
+              href={site.contactHref}
+            >
               Email
-            </a>
+            </a>{" "}
             me directly.
           </p>
+
           <p className="footer-copyright">
-            © {now?.getFullYear() ?? 2026},{" "}
+            © {now?.getFullYear() ?? new Date().getFullYear()},{" "}
             <span className="personal-name">{site.name}</span>
           </p>
         </div>

@@ -3,6 +3,12 @@ import { notFound } from "next/navigation";
 import { getBlogPostBySlug, getBlogPosts, type BlogPost } from "@/lib/notion";
 import { posts as fallbackPosts } from "@/lib/posts";
 
+/* The post body is `use cache` and every slug is prerendered via
+   generateStaticParams, so navigations serve static HTML immediately.
+   `params` is still awaited (required in Next 16), which the dev-time
+   instant-navigation validator flags — opt this segment out. */
+export const instant = false;
+
 export async function generateStaticParams() {
   const [notionPosts] = await Promise.all([getBlogPosts()]);
   const slugs = new Set(notionPosts.map((p) => p.slug));

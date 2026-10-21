@@ -1,6 +1,16 @@
 // app/opengraph-image.tsx
 import { ImageResponse } from "next/og";
 
+const SITE_HOST = (() => {
+  try {
+    return new URL(
+      process.env.NEXT_PUBLIC_SITE_URL || "https://ronny.tech"
+    ).host;
+  } catch {
+    return "ronny.tech";
+  }
+})();
+
 export const alt =
   "Aaron Nartey — Software Engineer and Creative Developer in Accra, Ghana";
 
@@ -114,7 +124,7 @@ export default function OpenGraphImage() {
           }}
         >
           <span>Software · Products · Systems</span>
-          <span>ronny.tech ↗</span>
+          <span>{SITE_HOST} &#8599;</span>
         </div>
       </div>
     ),

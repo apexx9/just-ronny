@@ -20,9 +20,18 @@ const MARGIN = 8;
 interface Props {
   content: ReactNode;
   children: ReactNode;
+  className?: string;
+  openDelay?: number;
+  closeDelay?: number;
 }
 
-export default function HoverCard({ content, children }: Props) {
+export default function HoverCard({
+  content,
+  children,
+  className,
+  openDelay = OPEN_DELAY,
+  closeDelay = CLOSE_DELAY,
+}: Props) {
   const id = useId();
   const [open, setOpen] = useState(false);
   const [pos, setPos] = useState({ left: 0, top: 0, origin: "top" });
@@ -76,13 +85,13 @@ export default function HoverCard({ content, children }: Props) {
       openNow();
       return;
     }
-    openTimer.current = window.setTimeout(openNow, OPEN_DELAY);
+    openTimer.current = window.setTimeout(openNow, openDelay);
   };
 
   const closeSoon = () => {
     cancel(openTimer);
     cancel(closeTimer);
-    closeTimer.current = window.setTimeout(() => setOpen(false), CLOSE_DELAY);
+    closeTimer.current = window.setTimeout(() => setOpen(false), closeDelay);
   };
 
   const closeNow = useCallback(() => {
@@ -143,7 +152,7 @@ export default function HoverCard({ content, children }: Props) {
             role="dialog"
             aria-hidden={!open}
             data-open={open}
-            className="hover-card"
+            className={className ? `hover-card ${className}` : "hover-card"}
             style={{
               left: pos.left,
               top: pos.top,

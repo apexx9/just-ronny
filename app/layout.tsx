@@ -34,10 +34,10 @@ const aspekta = localFont({
   preload: true,
 });
 
-/* Signature font — Sacramento (self-hosted). Drives the intro, the
-   about signature and the favicon mark. */
+/* Signature font — Darlington (self-hosted, GlyphStyle). Drives the intro,
+   the about signature and the favicon mark. */
 const signature = localFont({
-  src: "../public/fonts/sacramento-regular.ttf",
+  src: "../public/fonts/darlington-regular.ttf",
   variable: "--font-signature",
   weight: "400",
   style: "normal",
@@ -54,7 +54,7 @@ const siteConfig = {
   title: "Aaron Nartey — Software Engineer & Creative Developer",
   description:
     "I'm Aaron Nartey, a software engineer and creative developer from Accra, Ghana. I build thoughtful digital products, web applications, and tools that solve real problems.",
-  url: "https://ronny.tech",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://ronny.tech",
   email: "aaronnartey001@gmail.com",
   locale: "en_GH",
   keywords: [
@@ -184,6 +184,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${geist.variable} ${aspekta.variable} ${signature.variable}`}
       style={{ backgroundColor: "var(--background)" }}
       suppressHydrationWarning

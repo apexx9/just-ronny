@@ -1,5 +1,5 @@
 // scripts/generate-favicons.mjs
-// Renders the Sacramento signature (the site name) into the favicon set.
+// Renders the Darlington signature (the site name) into the favicon set.
 // Run: node scripts/generate-favicons.mjs
 import sharp from "sharp";
 import { access, copyFile, mkdir, readFile, writeFile } from "node:fs/promises";
@@ -11,10 +11,10 @@ const root = process.cwd();
 
 /* Kept in sync with `site.name` in lib/content.ts */
 const NAME = "Aaron Nartey";
-const FAMILY = "Sacramento";
+const FAMILY = "Darlington Demo";
 
-const FONT_SRC = path.join(root, "public/fonts/sacramento-regular.ttf");
-const FONT_DEST = path.join(os.homedir(), ".fonts", "sacramento-regular.ttf");
+const FONT_SRC = path.join(root, "public/fonts/darlington-regular.ttf");
+const FONT_DEST = path.join(os.homedir(), ".fonts", "darlington-regular.ttf");
 
 /* librsvg (sharp's SVG engine) resolves fonts through fontconfig, so the
    webfont has to be installed on the machine before we can render text. */
@@ -83,8 +83,8 @@ const targets = [
   { out: "public/icon-192.png", size: 192, fg: "#202020", bg: "transparent" },
   { out: "public/icon-512.png", size: 512, fg: "#202020", bg: "transparent" },
   { out: "public/apple-icon.png", size: 180, fg: "#202020", bg: "#ffffff" },
-  { out: "public/favicon-light-v2.png", size: 64, fg: "#202020", bg: "transparent" },
-  { out: "public/favicon-dark-v2.png", size: 64, fg: "#f5f5f5", bg: "transparent" },
+  { out: "public/favicon-light-v3.png", size: 64, fg: "#202020", bg: "transparent" },
+  { out: "public/favicon-dark-v3.png", size: 64, fg: "#f5f5f5", bg: "transparent" },
 ];
 
 await ensureFont();

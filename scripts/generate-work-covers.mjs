@@ -13,10 +13,10 @@ await mkdir(outDir, { recursive: true });
 
 /* Kept in sync with `site.name` in lib/content.ts */
 const NAME = "Aaron Nartey";
-const FAMILY = "Sacramento";
+const FAMILY = "Darlington Demo";
 
-const FONT_SRC = path.join(root, "public/fonts/sacramento-regular.ttf");
-const FONT_DEST = path.join(os.homedir(), ".fonts", "sacramento-regular.ttf");
+const FONT_SRC = path.join(root, "public/fonts/darlington-regular.ttf");
+const FONT_DEST = path.join(os.homedir(), ".fonts", "darlington-regular.ttf");
 
 async function ensureFont() {
   try {

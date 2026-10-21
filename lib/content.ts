@@ -42,16 +42,16 @@ export const site = {
       href: "https://www.instagram.com/__aaro.nn",
     },
   ],
-  instagram: {
-    handle: "@__aaro.nn",
-    href: "https://www.instagram.com/__aaro.nn",
-    bio: "Notes, works in progress and the occasional Accra sunset.",
-    stats: [
-      { label: "Posts", caption: "Publications" },
-      { label: "Notes", caption: "From the grid" },
-      { label: "Following", caption: "Accounts" },
-    ],
-  },
+
+instagram: {
+  handle: "@__aaro.nn",
+  name: "Aaron 🖤",            // optional
+  bio: "{gh}{gb} 黑色†",
+  href: "https://instagram.com/__aaro.nn",
+  followers: 12400,             // a number becomes "12.4K"; a string is shown as written
+  following: 310,               // optional
+  posts: 86,                    // optional
+},
   github: {
     handle: "apexx9",
     href: "https://github.com/apexx9",

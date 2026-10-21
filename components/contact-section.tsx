@@ -10,9 +10,15 @@ type Status = "idle" | "submitting" | "success" | "error";
 export default function ContactSection() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    message: "",
+    company: "",
+  });
 
-  const endpoint = process.env.NEXT_PUBLIC_CONTACT_ENDPOINT;
+  // First-party server route (Brevo) unless explicitly overridden.
+  const endpoint = process.env.NEXT_PUBLIC_CONTACT_ENDPOINT || "/api/contact";
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm((f) => ({ ...f, [e.target.name]: e.target.value }));
@@ -39,7 +45,7 @@ export default function ContactSection() {
         });
         if (res.ok) {
           setStatus("success");
-          setForm({ name: "", email: "", message: "" });
+          setForm({ name: "", email: "", message: "", company: "" });
         } else {
           setStatus("error");
           setError("Something went wrong. Please try again or email me directly.");
@@ -126,6 +132,20 @@ export default function ContactSection() {
           />
         </div>
 
+        {/* Honeypot — hidden from humans, catches naive bots. */}
+        <div className="form-honeypot" aria-hidden="true">
+          <label htmlFor="company">Company</label>
+          <input
+            id="company"
+            name="company"
+            type="text"
+            tabIndex={-1}
+            autoComplete="off"
+            value={form.company}
+            onChange={onChange}
+          />
+        </div>
+
         <div className="form-actions">
           <button
             type="submit"
@@ -158,7 +178,10 @@ export default function ContactSection() {
             <span className="form-alt-sep" aria-hidden="true">
               ·
             </span>
-            <HoverCard content={<InstagramCard />}>
+            <HoverCard
+              content={<InstagramCard />}
+              className="instagram-hover-surface"
+            >
               <a
                 className="about-link form-mailto"
                 href={site.instagram.href}
