@@ -1626,7 +1626,9 @@ a:focus-visible {
 .contact-form-section {
   border-bottom: 1px solid var(--separator);
   width: 100%;
+  max-width: 576px;
   margin-block: 20px;
+  margin-inline: auto;
   /* This section sits directly on the drawer surface (which has no
      padding), so it carries its own — otherwise the form runs flush to
      the screen edge on phones. */
