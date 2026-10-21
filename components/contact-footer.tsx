@@ -2,13 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { site } from "@/lib/content";
-import { Tooltip } from "./tool-tip";
-
-interface Props {
-  onHover?: () => void;
-  soundEnabled: boolean;
-  toggleSound: () => void;
-}
+import HoverCard from "./hover-card";
+import InstagramCard from "./instagram-card";
 
 const timeFmt = new Intl.DateTimeFormat("en-CA", {
   timeZone: site.timeZone,
@@ -17,11 +12,7 @@ const timeFmt = new Intl.DateTimeFormat("en-CA", {
   hour12: true,
 });
 
-export default function ContactFooter({
-  onHover,
-  soundEnabled,
-  toggleSound,
-}: Props) {
+export default function ContactFooter() {
   const [now, setNow] = useState<Date | null>(() => new Date());
 
   useEffect(() => {
@@ -46,20 +37,32 @@ export default function ContactFooter({
           </p>
           <p className="footer-socials">
             You can also find me on
-            {site.socials.map((s) => (
-              <a
-                key={s.id}
-                className="footer-link"
-                href={s.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                onPointerEnter={onHover}
-              >
-                {s.label}
-              </a>
-            ))}
+            {site.socials.map((s) =>
+              s.id === "instagram" ? (
+                <HoverCard key={s.id} content={<InstagramCard />}>
+                  <a
+                    className="footer-link"
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {s.label}
+                  </a>
+                </HoverCard>
+              ) : (
+                <a
+                  key={s.id}
+                  className="footer-link"
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {s.label}
+                </a>
+              )
+            )}
             or
-            <a className="footer-link" href={site.contactHref} onPointerEnter={onHover}>
+            <a className="footer-link" href={site.contactHref}>
               Email
             </a>
             me directly.
@@ -70,50 +73,6 @@ export default function ContactFooter({
           </p>
         </div>
       </div>
-
-      <Tooltip
-        text={soundEnabled ? "Sound on" : "Sound off"}
-        label={soundEnabled ? "Disable audio" : "Enable audio"}
-        className="sound-control"
-        onClick={toggleSound}
-        onHover={onHover}
-      >
-        {soundEnabled ? (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" />
-            <path d="M16 9a5 5 0 0 1 0 6" />
-            <path d="M19.364 18.364a9 9 0 0 0 0-12.728" />
-          </svg>
-        ) : (
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="14"
-            height="14"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            aria-hidden="true"
-          >
-            <path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z" />
-            <line x1="22" x2="16" y1="9" y2="15" />
-            <line x1="16" x2="22" y1="9" y2="15" />
-          </svg>
-        )}
-      </Tooltip>
     </footer>
   );
 }

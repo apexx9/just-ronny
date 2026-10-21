@@ -63,6 +63,10 @@ export default function ProjectDialog({ project, onClose }: Props) {
 
   if (!project || typeof document === "undefined") return null;
 
+  const hasRichStory = Boolean(
+    project.overview || project.challenge || project.approach
+  );
+
   return createPortal(
     <div className="project-dialog" role="dialog" aria-modal="true" ref={dialogRef}>
       <div className="project-backdrop" onClick={onClose} aria-hidden="true" />
@@ -146,42 +150,103 @@ export default function ProjectDialog({ project, onClose }: Props) {
               </dl>
 
               <div className="case-story">
-                <section>
-                  <h3>Overview</h3>
-                  <p>
-                    This is a placeholder case study. Replace this copy with the
-                    real story of {project.name} — the layout, hierarchy and
-                    typography adapt to whatever you write here.
-                  </p>
-                </section>
-                <section>
-                  <h3>Decisions</h3>
-                  <div className="case-decisions">
-                    {[1, 2, 3].map((n) => (
-                      <div className="case-decision" key={n}>
-                        <span className="decision-number" aria-hidden="true">
-                          0{n}
-                        </span>
-                        <div>
-                          <h4>Decision {n}</h4>
-                          <p>
-                            Description of the decision that shaped the work.
-                          </p>
+                {hasRichStory ? (
+                  <>
+                    {project.overview && (
+                      <section>
+                        <h3>Overview</h3>
+                        <p>{project.overview}</p>
+                      </section>
+                    )}
+                    {project.challenge && (
+                      <section>
+                        <h3>Challenge</h3>
+                        <p>{project.challenge}</p>
+                      </section>
+                    )}
+                    {project.approach && (
+                      <section>
+                        <h3>Approach</h3>
+                        <p>{project.approach}</p>
+                      </section>
+                    )}
+                    {!!project.features?.length && (
+                      <section>
+                        <h3>Features</h3>
+                        <ul className="case-list">
+                          {project.features.map((f) => (
+                            <li key={f}>{f}</li>
+                          ))}
+                        </ul>
+                      </section>
+                    )}
+                    {!!project.techStack?.length && (
+                      <section>
+                        <h3>Tech</h3>
+                        <div className="blog-tags">
+                          {project.techStack.map((t) => (
+                            <span key={t} className="blog-tag">
+                              {t}
+                            </span>
+                          ))}
                         </div>
+                      </section>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <section>
+                      <h3>Overview</h3>
+                      <p>
+                        This is a placeholder case study. Replace this copy with
+                        the real story of {project.name} — the layout, hierarchy
+                        and typography adapt to whatever you write here.
+                      </p>
+                    </section>
+                    <section>
+                      <h3>Decisions</h3>
+                      <div className="case-decisions">
+                        {[1, 2, 3].map((n) => (
+                          <div className="case-decision" key={n}>
+                            <span
+                              className="decision-number"
+                              aria-hidden="true"
+                            >
+                              0{n}
+                            </span>
+                            <div>
+                              <h4>Decision {n}</h4>
+                              <p>
+                                Description of the decision that shaped the
+                                work.
+                              </p>
+                            </div>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                </section>
+                    </section>
+                  </>
+                )}
               </div>
 
-              {project.href && project.href !== "#" && (
+              {project.liveUrl && (
                 <a
                   className="pill-button"
-                  href={project.href}
+                  href={project.liveUrl}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   Visit public website ↗
+                </a>
+              )}
+              {project.githubUrl && (
+                <a
+                  className="pill-button"
+                  href={project.githubUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  View source ↗
                 </a>
               )}
             </div>

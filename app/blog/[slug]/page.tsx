@@ -1,9 +1,31 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { posts } from "@/lib/posts";
+import { getBlogPostBySlug, getBlogPosts, type BlogPost } from "@/lib/notion";
+import { posts as fallbackPosts } from "@/lib/posts";
 
-export function generateStaticParams() {
-  return posts.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  const [notionPosts] = await Promise.all([getBlogPosts()]);
+  const slugs = new Set(notionPosts.map((p) => p.slug));
+  for (const p of fallbackPosts) slugs.add(p.slug);
+  return Array.from(slugs).map((slug) => ({ slug }));
+}
+
+function escapeHtml(text: string): string {
+  return text
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#39;");
+}
+
+// Notion content is already HTML; local fallback content is plain text.
+function toHtml(content: string): string {
+  if (content.includes("<")) return content;
+  return content
+    .split("\n\n")
+    .map((para) => `<p>${escapeHtml(para)}</p>`)
+    .join("");
 }
 
 export default async function BlogPostPage({
@@ -12,8 +34,28 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const post = posts.find((p) => p.slug === slug);
+
+  const notion = await getBlogPostBySlug(slug);
+  let post: BlogPost | null = notion;
+
+  if (!post) {
+    const fb = fallbackPosts.find((p) => p.slug === slug);
+    if (fb) {
+      post = {
+        slug: fb.slug,
+        title: fb.title,
+        date: fb.date,
+        tags: fb.tags as string[],
+        summary: fb.summary,
+        readingTime: fb.readingTime,
+        content: toHtml(fb.content),
+      };
+    }
+  }
+
   if (!post) notFound();
+
+  const html = toHtml(post.content);
 
   return (
     <main className="blog-post-page">
@@ -43,11 +85,7 @@ export default async function BlogPostPage({
           </div>
         </header>
 
-        <article className="blog-article">
-          {post.content.split("\n\n").map((p, i) => (
-            <p key={i}>{p}</p>
-          ))}
-        </article>
+        <article className="blog-article" dangerouslySetInnerHTML={{ __html: html }} />
 
         <footer className="blog-post-footer">
           <Link className="about-link" href="/blog">

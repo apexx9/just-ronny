@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 const neverChanges = () => () => {};
 
@@ -202,71 +202,4 @@ export function useFooterGradient() {
   }, []);
 
   return ref;
-}
-
-/**
- * Hover sound effect using WebAudio.
- */
-export function useHoverSound(enabled: boolean) {
-  const stateRef = useRef<{
-    ctx: AudioContext | null;
-    buffer: AudioBuffer | null;
-    lastPlay: number;
-  }>({ ctx: null, buffer: null, lastPlay: 0 });
-
-  useEffect(() => {
-    const s = stateRef.current;
-    const controller = new AbortController();
-    let raw: ArrayBuffer | null = null;
-
-    const decode = async () => {
-      if (raw && s.ctx && !s.buffer) {
-        try {
-          s.buffer = await s.ctx.decodeAudioData(raw);
-        } catch {}
-      }
-    };
-
-    const unlock = (e: Event) => {
-      if (!e.isTrusted || typeof window === "undefined" || !window.AudioContext)
-        return;
-      s.ctx ??= new AudioContext();
-      if (s.ctx.state === "suspended") s.ctx.resume().catch(() => {});
-      decode();
-    };
-
-    fetch("/audio/hover.mp3", { signal: controller.signal })
-      .then((r) => (r.ok ? r.arrayBuffer() : Promise.reject()))
-      .then((b) => {
-        raw = b;
-        decode();
-      })
-      .catch(() => {});
-
-    window.addEventListener("pointerdown", unlock, { passive: true });
-    window.addEventListener("keydown", unlock);
-
-    return () => {
-      controller.abort();
-      window.removeEventListener("pointerdown", unlock);
-      window.removeEventListener("keydown", unlock);
-      s.ctx?.close();
-    };
-  }, []);
-
-  return useCallback(() => {
-    const s = stateRef.current;
-    if (!enabled || !matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-    if (document.hidden || s.ctx?.state !== "running" || !s.buffer) return;
-    const now = performance.now();
-    if (now - s.lastPlay < 60) return;
-    s.lastPlay = now;
-    const src = s.ctx.createBufferSource();
-    const gain = s.ctx.createGain();
-    src.buffer = s.buffer;
-    gain.gain.value = 0.125;
-    src.connect(gain);
-    gain.connect(s.ctx.destination);
-    src.start();
-  }, [enabled]);
 }

@@ -59,7 +59,6 @@ interface TooltipProps {
   children: ReactNode;
   className?: string;
   onClick?: () => void;
-  onHover?: () => void;
 }
 
 export function Tooltip({
@@ -68,7 +67,6 @@ export function Tooltip({
   children,
   className = "",
   onClick,
-  onHover,
 }: TooltipProps) {
   const id = useId();
   const ctx = useContext(TooltipCtx);
@@ -118,7 +116,6 @@ export function Tooltip({
             matchMedia("(hover: hover) and (pointer: fine)").matches
           ) {
             show(e.currentTarget);
-            onHover?.();
           }
         }}
         onPointerLeave={(e) => {

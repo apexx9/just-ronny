@@ -9,6 +9,15 @@ export type Project = {
   href: string;
   image: { src: string; width: number; height: number; alt: string };
   company?: { label: string; href: string };
+  // Rich case-study fields — populated from Notion, optional for local data.
+  description?: string;
+  overview?: string;
+  challenge?: string;
+  approach?: string;
+  features?: string[];
+  techStack?: string[];
+  liveUrl?: string;
+  githubUrl?: string;
 };
 
 export const site = {
@@ -20,14 +29,33 @@ export const site = {
   heroTagline: "I build thoughtful digital products and software.",
   availability: "Open to new work",
   socials: [
-    { id: "github", label: "GitHub", href: "https://github.com/" },
+    { id: "github", label: "GitHub", href: "https://github.com/apexx9" },
     {
       id: "linkedin",
       label: "LinkedIn",
       href: "https://www.linkedin.com/",
     },
     { id: "x", label: "X", href: "https://x.com/" },
+    {
+      id: "instagram",
+      label: "Instagram",
+      href: "https://www.instagram.com/__aaro.nn",
+    },
   ],
+  instagram: {
+    handle: "@__aaro.nn",
+    href: "https://www.instagram.com/__aaro.nn",
+    bio: "Notes, works in progress and the occasional Accra sunset.",
+    stats: [
+      { label: "Posts", caption: "Publications" },
+      { label: "Notes", caption: "From the grid" },
+      { label: "Following", caption: "Accounts" },
+    ],
+  },
+  github: {
+    handle: "apexx9",
+    href: "https://github.com/apexx9",
+  },
   services: [
     "Product engineering",
     "Web development",

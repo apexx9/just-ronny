@@ -7,10 +7,9 @@ import { ThemeToggle } from "./theme-toggle";
 interface Props {
   navRef: React.RefObject<HTMLDivElement | null>;
   expanded: boolean;
-  onHover?: () => void;
 }
 
-export default function DrawerNavigation({ navRef, expanded, onHover }: Props) {
+export default function DrawerNavigation({ navRef, expanded }: Props) {
   const scrollToShowcase = () => {
     document.getElementById("showcase")?.scrollIntoView({
       behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -50,25 +49,24 @@ export default function DrawerNavigation({ navRef, expanded, onHover }: Props) {
         <a
           className="navigation-name personal-name"
           href="#hero"
-          onPointerEnter={onHover}
           onClick={scrollToHero}
         >
           {site.name}
         </a>
         <nav aria-label="Main navigation">
-          <a className="desktop-nav" href="#work" onPointerEnter={onHover}>
+          <a className="desktop-nav" href="#work">
             Work
           </a>
-          <a className="desktop-nav" href="#information" onPointerEnter={onHover}>
+          <a className="desktop-nav" href="#information">
             Information
           </a>
-          <a className="desktop-nav" href="#contact-form" onPointerEnter={onHover}>
+          <a className="desktop-nav" href="#contact-form">
             Contact
           </a>
-          <Link className="desktop-nav" href="/blog" onPointerEnter={onHover}>
+          <Link className="desktop-nav" href="/blog">
             Blog
           </Link>
-          <ThemeToggle onPointerEnter={onHover} />
+          <ThemeToggle />
         </nav>
       </div>
     </div>

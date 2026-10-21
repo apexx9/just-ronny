@@ -2,14 +2,12 @@
 
 import { useState } from "react";
 import { site } from "@/lib/content";
-
-interface Props {
-  onHover?: () => void;
-}
+import HoverCard from "./hover-card";
+import InstagramCard from "./instagram-card";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
-export default function ContactSection({ onHover }: Props) {
+export default function ContactSection() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState<string | null>(null);
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -73,7 +71,7 @@ export default function ContactSection({ onHover }: Props) {
         Contact
       </h2>
       <p className="contact-form-intro">
-            Have something in mind? Say hi — I&apos;ll get back to you.
+        Have something in mind? Say hi — I&apos;ll get back to you.
       </p>
 
       <form onSubmit={onSubmit} className="contact-form" noValidate>
@@ -87,9 +85,9 @@ export default function ContactSection({ onHover }: Props) {
               name="name"
               type="text"
               className="form-input"
+              placeholder="Your name"
               value={form.name}
               onChange={onChange}
-              onPointerEnter={onHover}
               autoComplete="name"
               required
             />
@@ -103,9 +101,9 @@ export default function ContactSection({ onHover }: Props) {
               name="email"
               type="email"
               className="form-input"
+              placeholder="you@studio.com"
               value={form.email}
               onChange={onChange}
-              onPointerEnter={onHover}
               autoComplete="email"
               required
             />
@@ -120,10 +118,10 @@ export default function ContactSection({ onHover }: Props) {
             id="message"
             name="message"
             className="form-textarea"
+            placeholder="Tell me about the project…"
             rows={5}
             value={form.message}
             onChange={onChange}
-            onPointerEnter={onHover}
             required
           />
         </div>
@@ -133,29 +131,72 @@ export default function ContactSection({ onHover }: Props) {
             type="submit"
             className="pill-button primary-button form-submit"
             disabled={status === "submitting"}
-            onPointerEnter={onHover}
           >
-            {status === "submitting" ? "Sending..." : "Send message"}
+            {status === "submitting" ? "Sending…" : "Send message"}
+            {status !== "submitting" && (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
+            )}
           </button>
-          <a
-            className="about-link form-mailto"
-            href={site.contactHref}
-            onPointerEnter={onHover}
-          >
-            Or email directly
-          </a>
+          <span className="form-alt">
+            <a className="about-link form-mailto" href={site.contactHref}>
+              Or email directly
+            </a>
+            <span className="form-alt-sep" aria-hidden="true">
+              ·
+            </span>
+            <HoverCard content={<InstagramCard />}>
+              <a
+                className="about-link form-mailto"
+                href={site.instagram.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                or say hi on Instagram <span aria-hidden="true">↗</span>
+              </a>
+            </HoverCard>
+          </span>
         </div>
 
-        {status === "success" && (
-          <p className="form-status form-success" role="status">
-            Thanks — your message was sent.
-          </p>
-        )}
-        {status === "error" && error && (
-          <p className="form-status form-error" role="alert">
-            {error}
-          </p>
-        )}
+        <div className="form-status-slot" aria-live="polite">
+          {status === "success" && (
+            <p className="form-status form-success" role="status">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+              Thanks — your message was sent.
+            </p>
+          )}
+          {status === "error" && error && (
+            <p className="form-status form-error" role="alert">
+              {error}
+            </p>
+          )}
+        </div>
       </form>
     </section>
   );

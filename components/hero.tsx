@@ -3,11 +3,7 @@
 import { useState } from "react";
 import { site } from "@/lib/content";
 
-interface HeroProps {
-  onHover?: () => void;
-}
-
-export default function Hero({ onHover }: HeroProps) {
+export default function Hero() {
   const [status, setStatus] = useState<"idle" | "copied" | "failed">("idle");
   const email = site.contactHref.replace("mailto:", "");
 
@@ -48,7 +44,6 @@ export default function Hero({ onHover }: HeroProps) {
           <button
             className="pill-button primary-button"
             onClick={copy}
-            onPointerEnter={onHover}
             aria-label={`Copy ${email}`}
           >
             <span className="copy-label">
@@ -56,7 +51,7 @@ export default function Hero({ onHover }: HeroProps) {
             </span>
           </button>
 
-          <a className="pill-button" href="#work" onPointerEnter={onHover}>
+          <a className="pill-button" href="#work">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="15"

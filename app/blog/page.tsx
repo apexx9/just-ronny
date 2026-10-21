@@ -1,7 +1,21 @@
 import Link from "next/link";
-import { posts } from "@/lib/posts";
+import { getBlogPosts } from "@/lib/notion";
+import { posts as fallbackPosts } from "@/lib/posts";
 
-export default function BlogPage() {
+export default async function BlogPage() {
+  const notionPosts = await getBlogPosts();
+  const posts = notionPosts.length
+    ? notionPosts
+    : fallbackPosts.map((p) => ({
+        slug: p.slug,
+        title: p.title,
+        date: p.date,
+        tags: p.tags as string[],
+        summary: p.summary,
+        readingTime: p.readingTime,
+        content: p.content,
+      }));
+
   return (
     <main className="blog-page">
       <div className="editorial-column">

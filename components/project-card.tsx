@@ -5,10 +5,9 @@ import type { Project } from "@/lib/content";
 interface Props {
   project: Project;
   onClick: () => void;
-  onHover?: () => void;
 }
 
-export default function ProjectCard({ project, onClick, onHover }: Props) {
+export default function ProjectCard({ project, onClick }: Props) {
   const handleMove = (e: React.PointerEvent<HTMLButtonElement>) => {
     if (
       e.pointerType !== "mouse" ||
@@ -32,7 +31,6 @@ export default function ProjectCard({ project, onClick, onHover }: Props) {
     <button
       className="project-card"
       onClick={onClick}
-      onPointerEnter={onHover}
       onPointerMove={handleMove}
       onPointerLeave={reset}
       aria-label={`View ${project.name} project`}

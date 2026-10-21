@@ -3,11 +3,7 @@
 import Signature from "./signature";
 import { site } from "@/lib/content";
 
-interface Props {
-  onHover?: () => void;
-}
-
-export default function AboutSection({ onHover }: Props) {
+export default function AboutSection() {
   return (
     <section
       data-analytics-section="about"
@@ -42,11 +38,7 @@ export default function AboutSection({ onHover }: Props) {
         </div>
         <div>
           <h3 className="section-label">Contact</h3>
-          <a
-            className="about-contact about-link"
-            href={site.contactHref}
-            onPointerEnter={onHover}
-          >
+          <a className="about-contact about-link" href={site.contactHref}>
             Let&apos;s talk
           </a>
         </div>
