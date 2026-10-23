@@ -51,9 +51,9 @@ const signature = localFont({
 
 const siteConfig = {
   name: "Aaron Nartey",
-  title: "Aaron Nartey — Software Engineer & Creative Developer",
+  title: "Aaron Nartey — Product Designer & Engineer",
   description:
-    "I'm Aaron Nartey, a software engineer and creative developer from Accra, Ghana. I build thoughtful digital products, web applications, and tools that solve real problems.",
+    "I'm Aaron Nartey, a product designer and engineer from Accra, Ghana. I design and build thoughtful digital products, interfaces, and tools that solve real problems.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://ronny.tech",
   email: "aaronnartey001@gmail.com",
   locale: "en_GH",
@@ -106,7 +106,7 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Aaron Nartey — Software Engineer & Creative Developer",
+        alt: "Aaron Nartey — Product Designer & Engineer",
       },
     ],
   },

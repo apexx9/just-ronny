@@ -145,6 +145,10 @@ html {
   scrollbar-gutter: stable;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+}
+
 body {
   background: var(--background);
   margin: 0;
@@ -225,13 +229,6 @@ a:focus-visible {
   padding: 0.12em 0.1em;
   clip-path: inset(0 100% 0 0);
   will-change: clip-path;
-}
-
-.intro-wipe {
-  pointer-events: none;
-  background: var(--background);
-  position: absolute;
-  inset: 0;
 }
 
 /* ============================================================
@@ -1569,7 +1566,7 @@ a:focus-visible {
   .theme-toggle--floating:hover { scale: 1; }
 }
 
-/* Post-intro hero reveal — the intro overlay wipes away, then the hero copy
+/* Post-intro hero reveal — the intro overlay fades away, then the hero copy
    rises in a short stagger. Guarded so reduced-motion users see it instantly. */
 @media (prefers-reduced-motion: no-preference) {
   .portfolio:not(.intro-ready) .hero-title,
@@ -1780,6 +1777,46 @@ a:focus-visible {
    ============================================================ */
 .blog-page,
 .blog-post-page { min-height: 100svh; }
+
+.not-found-page {
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  padding: 96px 20px;
+  background-color: var(--background);
+  background-image: var(--hero-gradient);
+}
+.not-found-content {
+  width: 100%;
+  max-width: 560px;
+}
+.not-found-code {
+  color: var(--tertiary);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.not-found-title {
+  margin-top: 16px;
+  font-size: clamp(40px, 10vw, 72px);
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.05em;
+  color: var(--foreground);
+}
+.not-found-description {
+  max-width: 400px;
+  margin-top: 20px;
+  color: var(--editorial);
+  line-height: 1.65;
+}
+.not-found-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 28px;
+}
 .blog-header { display: grid; gap: 12px; margin-bottom: 24px; }
 .blog-title { margin-bottom: 0; }
 .blog-intro { color: var(--editorial); }
@@ -1797,6 +1834,18 @@ a:focus-visible {
   color: inherit;
   transition: background-color 0.15s;
 }
+.blog-item-cover,
+.blog-post-cover {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid var(--separator);
+}
+.blog-item-cover { margin-bottom: 8px; }
+.blog-post-cover { margin-bottom: 24px; }
 .blog-item-meta {
   display: flex;
   align-items: center;

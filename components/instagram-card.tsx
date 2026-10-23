@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { site } from "@/lib/content";
 import { renderWithFlags } from "./Flags";
 
@@ -15,9 +14,14 @@ function formatCount(value: number | string) {
 
 export default function InstagramCard() {
   const ig = site.instagram;
-  const [imgOk, setImgOk] = useState(true);
   const initial =
-    ig.handle.replace(/^@/, "").charAt(0).toUpperCase() || "?";
+    ig.name?.trim().charAt(0) ||
+    ig.handle
+      .replace(/^@/, "")
+      .replace(/[^a-z0-9]/i, "")
+      .charAt(0)
+      .toUpperCase() ||
+    "?";
   const stats: { label: string; value: number | string }[] = [];
 
   if (ig.posts !== undefined) stats.push({ label: "posts", value: ig.posts });
@@ -50,17 +54,16 @@ export default function InstagramCard() {
 
       <div className="instagram-card-head">
         <div className="instagram-avatar-wrap">
-          {imgOk ? (
+          {ig.avatar ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img
               className="instagram-avatar"
-              src="/images/instagram-avatar.jpg"
+              src={ig.avatar}
               alt=""
               width={80}
               height={80}
               loading="lazy"
               decoding="async"
-              onError={() => setImgOk(false)}
             />
           ) : (
             <span

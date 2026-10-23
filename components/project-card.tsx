@@ -1,6 +1,7 @@
 "use client";
 
 import type { Project } from "@/lib/content";
+import ProjectImage from "./project-image";
 
 interface Props {
   project: Project;
@@ -37,24 +38,21 @@ export default function ProjectCard({ project, onClick }: Props) {
       aria-haspopup="dialog"
     >
       <div className="project-cover">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={project.image.src}
-          width={project.image.width}
-          height={project.image.height}
-          loading="lazy"
-          alt={project.image.alt}
-        />
+        <ProjectImage project={project} />
       </div>
       <span className="project-title">
         <span data-project-title="true">{project.title}</span>
-        <span className="project-discipline" data-project-type="true">
-          — {project.discipline}
+        {project.discipline && (
+          <span className="project-discipline" data-project-type="true">
+            — {project.discipline}
+          </span>
+        )}
+      </span>
+      {project.summary && (
+        <span className="project-summary" data-project-summary="true">
+          {project.summary}
         </span>
-      </span>
-      <span className="project-summary" data-project-summary="true">
-        {project.summary}
-      </span>
+      )}
     </button>
   );
 }

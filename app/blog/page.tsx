@@ -13,6 +13,7 @@ export default async function BlogPage() {
         tags: p.tags as string[],
         summary: p.summary,
         readingTime: p.readingTime,
+        coverImage: null,
         content: p.content,
       }));
 
@@ -33,6 +34,16 @@ export default async function BlogPage() {
           {posts.map((post) => (
             <li key={post.slug} className="blog-item">
               <Link className="blog-item-link" href={`/blog/${post.slug}`}>
+                {post.coverImage && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    className="blog-item-cover"
+                    src={post.coverImage}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                )}
                 <div className="blog-item-meta">
                   <time className="blog-date" dateTime={post.date}>
                     {new Date(post.date).toLocaleDateString("en-CA", {
@@ -45,14 +56,18 @@ export default async function BlogPage() {
                   <span className="blog-reading">{post.readingTime}</span>
                 </div>
                 <h2 className="blog-item-title">{post.title}</h2>
-                <p className="blog-item-summary">{post.summary}</p>
-                <div className="blog-tags">
-                  {post.tags.map((t) => (
-                    <span key={t} className="blog-tag">
-                      {t}
-                    </span>
-                  ))}
-                </div>
+                {post.summary && (
+                  <p className="blog-item-summary">{post.summary}</p>
+                )}
+                {post.tags.length > 0 && (
+                  <div className="blog-tags">
+                    {post.tags.map((t) => (
+                      <span key={t} className="blog-tag">
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </Link>
             </li>
           ))}

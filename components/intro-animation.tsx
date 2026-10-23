@@ -4,12 +4,12 @@ import { motion } from "framer-motion";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { site } from "@/lib/content";
 
-type Phase = "write" | "wipe" | "done";
+type Phase = "write" | "fade" | "done";
 
-const WIPE_AT = 2100;
-const DONE_AT = 3500;
+const FADE_AT = 1450;
+const DONE_AT = 2100;
 
-/* Same pen curve as components/signature.tsx, slowed down for the overture. */
+/* Same pen curve as components/signature.tsx, tuned for the overture. */
 const WRITE_EASE = [0.63, 0.01, 0.26, 1] as const;
 
 interface IntroAnimationProps {
@@ -49,7 +49,7 @@ export default function IntroAnimation({
     }
 
     timers.current = [
-      setTimeout(() => setPhase("wipe"), WIPE_AT),
+      setTimeout(() => setPhase("fade"), FADE_AT),
       setTimeout(finish, DONE_AT),
     ];
 
@@ -61,38 +61,31 @@ export default function IntroAnimation({
 
   if (!enabled || phase === "done") return null;
 
-  const isWiping = phase === "wipe";
+  const isFading = phase === "fade";
 
   return (
-    <div
+    <motion.div
       className="intro"
+      animate={{ opacity: isFading ? 0 : 1 }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       role="presentation"
       aria-hidden="true"
       onClick={finish}
     >
       <motion.div
         className="intro-content"
-        animate={{ scale: isWiping ? 0.92 : 1, y: isWiping ? -12 : 0 }}
+        animate={{ scale: isFading ? 0.92 : 1, y: isFading ? -12 : 0 }}
         transition={{ duration: 1.1, ease: [0.6, 0.05, -0.01, 0.9] }}
       >
         <motion.span
           className="intro-name"
           initial={{ clipPath: "inset(0% 100% 0% 0%)" }}
           animate={{ clipPath: "inset(0% 0% 0% 0%)" }}
-          transition={{ duration: 2, ease: WRITE_EASE }}
+          transition={{ duration: 1.35, ease: WRITE_EASE }}
         >
           {site.name}
         </motion.span>
       </motion.div>
-
-      <motion.div
-        className="intro-wipe"
-        initial={{ clipPath: "circle(0% at 50% 50%)" }}
-        animate={{
-          clipPath: isWiping ? "circle(150% at 50% 50%)" : "circle(0% at 50% 50%)",
-        }}
-        transition={{ duration: 1.3, ease: [0.6, 0.05, -0.01, 0.9] }}
-      />
-    </div>
+    </motion.div>
   );
 }

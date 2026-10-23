@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import type { Project } from "@/lib/content";
+import ProjectImage from "./project-image";
 
 interface Props {
   project: Project | null;
@@ -64,7 +65,12 @@ export default function ProjectDialog({ project, onClose }: Props) {
   if (!project || typeof document === "undefined") return null;
 
   const hasRichStory = Boolean(
-    project.overview || project.challenge || project.approach
+    project.description ||
+      project.overview ||
+      project.challenge ||
+      project.approach ||
+      project.features?.length ||
+      project.techStack?.length
   );
 
   return createPortal(
@@ -103,25 +109,25 @@ export default function ProjectDialog({ project, onClose }: Props) {
           <article className="project-scroll">
             <div className="project-details">
               <div className="project-cover">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={project.image.src}
-                  width={project.image.width}
-                  height={project.image.height}
-                  alt={project.image.alt}
-                />
+                <ProjectImage key={project.id} project={project} loading="eager" />
               </div>
 
               <header className="project-heading">
                 <h2 data-project-title>{project.title}</h2>
-                <span className="project-discipline" data-project-type>
-                  {project.discipline}
-                </span>
+                {project.discipline && (
+                  <span className="project-discipline" data-project-type>
+                    {project.discipline}
+                  </span>
+                )}
               </header>
 
-              <p className="project-lead" data-project-summary>
-                {project.summary}
-              </p>
+              {project.summary &&
+                project.summary !==
+                  (project.overview || project.description) && (
+                  <p className="project-lead" data-project-summary>
+                    {project.summary}
+                  </p>
+                )}
 
               <dl className="project-facts">
                 <div>
@@ -156,6 +162,12 @@ export default function ProjectDialog({ project, onClose }: Props) {
                       <section>
                         <h3>Overview</h3>
                         <p>{project.overview}</p>
+                      </section>
+                    )}
+                    {!project.overview && project.description && (
+                      <section>
+                        <h3>Overview</h3>
+                        <p>{project.description}</p>
                       </section>
                     )}
                     {project.challenge && (
@@ -194,38 +206,12 @@ export default function ProjectDialog({ project, onClose }: Props) {
                     )}
                   </>
                 ) : (
-                  <>
-                    <section>
-                      <h3>Overview</h3>
-                      <p>
-                        This is a placeholder case study. Replace this copy with
-                        the real story of {project.name} — the layout, hierarchy
-                        and typography adapt to whatever you write here.
-                      </p>
-                    </section>
-                    <section>
-                      <h3>Decisions</h3>
-                      <div className="case-decisions">
-                        {[1, 2, 3].map((n) => (
-                          <div className="case-decision" key={n}>
-                            <span
-                              className="decision-number"
-                              aria-hidden="true"
-                            >
-                              0{n}
-                            </span>
-                            <div>
-                              <h4>Decision {n}</h4>
-                              <p>
-                                Description of the decision that shaped the
-                                work.
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </section>
-                  </>
+                  <section>
+                    <h3>Case study</h3>
+                    <p>
+                      More details about {project.name} are coming soon.
+                    </p>
+                  </section>
                 )}
               </div>
 

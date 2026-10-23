@@ -54,6 +54,7 @@ export default async function BlogPostPage({
         tags: fb.tags as string[],
         summary: fb.summary,
         readingTime: fb.readingTime,
+        coverImage: null,
         content: toHtml(fb.content),
       };
     }
@@ -82,14 +83,27 @@ export default async function BlogPostPage({
             <span className="blog-sep">·</span>
             <span className="blog-reading">{post.readingTime}</span>
           </div>
-          <div className="blog-tags">
-            {post.tags.map((t) => (
-              <span key={t} className="blog-tag">
-                {t}
-              </span>
-            ))}
-          </div>
+          {post.tags.length > 0 && (
+            <div className="blog-tags">
+              {post.tags.map((t) => (
+                <span key={t} className="blog-tag">
+                  {t}
+                </span>
+              ))}
+            </div>
+          )}
         </header>
+
+        {post.coverImage && (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            className="blog-post-cover"
+            src={post.coverImage}
+            alt=""
+            loading="eager"
+            decoding="async"
+          />
+        )}
 
         <article className="blog-article" dangerouslySetInnerHTML={{ __html: html }} />
 

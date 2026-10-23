@@ -7,7 +7,13 @@ export type Project = {
   role: string;
   period: string;
   href: string;
-  image: { src: string; width: number; height: number; alt: string };
+  image: {
+    src: string;
+    width: number;
+    height: number;
+    alt: string;
+    fallbackSrc?: string;
+  };
   company?: { label: string; href: string };
   // Rich case-study fields — populated from Notion, optional for local data.
   description?: string;
@@ -24,9 +30,9 @@ export const site = {
   name: "Aaron Nartey",
   location: "Accra, Ghana",
   timeZone: "Africa/Accra",
-  role: "Software engineer & creative developer",
+  role: "Product designer & engineer",
   contactHref: "mailto:aaronnartey001@gmail.com",
-  heroTagline: "I build thoughtful digital products and software.",
+  heroTagline: "I design and build thoughtful digital products.",
   availability: "Open to new work",
   socials: [
     { id: "github", label: "GitHub", href: "https://github.com/apexx9" },
@@ -48,7 +54,8 @@ instagram: {
   name: "Aaron 🖤",            // optional
   bio: "{gh}{gb} 黑色†",
   href: "https://instagram.com/__aaro.nn",
-  followers: 12400,             // a number becomes "12.4K"; a string is shown as written
+  avatar: null,
+  followers: 1074,             // a number becomes "12.4K"; a string is shown as written
   following: 310,               // optional
   posts: 86,                    // optional
 },
@@ -64,7 +71,7 @@ instagram: {
   ],
   about: {
     intro: "Hi, I'm",
-    description: "a software engineer and creative developer",
+    description: "a product designer and engineer",
     experience:
       "I design and build digital products end to end — from the first interface sketch to the systems and APIs behind it. I care about clarity, speed and the small details that make software feel considered.",
   },
