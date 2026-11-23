@@ -3,8 +3,10 @@
 
 import { useEffect, useState } from "react";
 import { site } from "@/lib/content";
+import packageJson from "@/package.json";
 import HoverCard from "./hover-card";
 import InstagramCard from "./instagram-card";
+import Logo from "./Logo";
 
 const timeFmt = new Intl.DateTimeFormat("en-CA", {
   timeZone: site.timeZone,
@@ -33,6 +35,19 @@ export default function ContactFooter() {
       aria-label="Contact and social links"
     >
       <div className="footer-column">
+        <div className="footer-top">
+          <a
+            className="footer-brand"
+            href="#hero"
+            aria-label={`${site.name} — back to top`}
+          >
+            <Logo height={18} title={site.name} />
+          </a>
+          <span className="footer-version">v{packageJson.version}</span>
+          <span className="footer-hint" aria-hidden="true">
+            press w · i · l · c · b
+          </span>
+        </div>
         <div className="footer-copy">
           <p className="footer-location">
             Right now I&apos;m in {site.location}, where it&apos;s{" "}
@@ -93,7 +108,7 @@ export default function ContactFooter() {
           </p>
 
           <p className="footer-copyright">
-            © {now?.getFullYear() ?? new Date().getFullYear()},{" "}
+            © {now ? now.getFullYear() : ""},{" "}
             <span className="personal-name">{site.name}</span>
           </p>
         </div>

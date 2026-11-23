@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import SectionHead from "./section-head";
+import SectionIcon from "./section-icon";
 import { site } from "@/lib/content";
 import type { Contributions } from "@/lib/contributions";
 
@@ -43,14 +45,18 @@ function buildWeeks(days: Contributions["days"]) {
 }
 
 function monthSlots(weeks: ReturnType<typeof buildWeeks>) {
-  const slots: (string | null)[] = weeks.map(() => null);
+  const slots: { label: string; index: number }[] = [];
   let lastMonth = -1;
+  let lastIndex = -99;
   weeks.forEach((week, i) => {
     const first = week.find(Boolean);
     if (!first) return;
     const month = new Date(`${first.date}T00:00:00Z`).getUTCMonth();
     if (month !== lastMonth) {
-      slots[i] = MONTH_LABELS[month];
+      if (i - lastIndex >= 3) {
+        slots.push({ label: MONTH_LABELS[month], index: i });
+        lastIndex = i;
+      }
       lastMonth = month;
     }
   });
@@ -82,35 +88,59 @@ export default function ActivitySection() {
 
   const weeks = state === "ready" && data ? buildWeeks(data.days) : [];
   const months = monthSlots(weeks);
+  const firstDate = weeks.flat().find(Boolean)?.date ?? null;
+  const [focusDate, setFocusDate] = useState<string | null>(null);
+
+  /* Roving tabindex: the heatmap is one tab stop; arrows walk the days. */
+  const onGridKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const deltas: Record<string, number> = {
+      ArrowRight: 7,
+      ArrowLeft: -7,
+      ArrowDown: 1,
+      ArrowUp: -1,
+    };
+    const delta = deltas[e.key];
+    if (!delta) return;
+    const cells = Array.from(
+      e.currentTarget.querySelectorAll<HTMLElement>("[data-date]"),
+    );
+    const index = cells.indexOf(document.activeElement as HTMLElement);
+    const next = cells[index + delta];
+    if (!next) return;
+    e.preventDefault();
+    next.focus();
+  };
 
   return (
     <section
       data-analytics-section="activity"
       id="activity"
-      className="activity-section"
+      className="middle-section activity-section"
       aria-labelledby="activity-heading"
     >
-      <div className="activity-head">
-        <h2 className="section-label" id="activity-heading">
-          Activity
-        </h2>
-        {state === "ready" && data && (
-          <p className="activity-summary">
-            <span className="activity-total">
-              {data.total.toLocaleString("en-US")}
-            </span>{" "}
-            contributions in the last year ·{" "}
-            <a
-              className="about-link"
-              href={site.github.href}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              github.com/{site.github.handle}
-            </a>
-          </p>
-        )}
-      </div>
+      <SectionHead
+        title="Activity"
+        id="activity-heading"
+        icon={<SectionIcon name="activity" />}
+        lead={
+          state === "ready" && data ? (
+            <>
+              <span className="activity-total">
+                {data.total.toLocaleString("en-US")}
+              </span>{" "}
+              contributions in the last year ·{" "}
+              <a
+                className="about-link"
+                href={site.github.href}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                github.com/{site.github.handle}
+              </a>
+            </>
+          ) : undefined
+        }
+      />
 
       {state === "loading" && (
         <div className="activity-scroll" aria-hidden="true">
@@ -130,8 +160,12 @@ export default function ActivitySection() {
         <div className="activity-scroll">
           <div className="activity-calendar">
             <div className="activity-months" aria-hidden="true">
-              {months.map((label, i) => (
-                <span key={i} className="activity-month-slot">
+              {months.map(({ label, index }) => (
+                <span
+                  key={index}
+                  className="activity-month-slot"
+                  style={{ gridColumn: index + 1 }}
+                >
                   {label}
                 </span>
               ))}
@@ -144,20 +178,32 @@ export default function ActivitySection() {
               </div>
               <div
                 className="activity-grid"
-                role="img"
-                aria-label={`${data.total.toLocaleString("en-US")} GitHub contributions in the last year`}
+                role="grid"
+                aria-label={`${data.total.toLocaleString("en-US")} GitHub contributions in the last year. Use arrow keys to move between days.`}
+                aria-rowcount={7}
+                aria-colcount={weeks.length}
+                onKeyDown={onGridKeyDown}
               >
                 {weeks.map((week, wi) => (
-                  <span key={wi} className="activity-week">
+                  <span key={wi} className="activity-week" role="row">
                     {week.map((day, di) =>
                       day ? (
                         <span
                           key={di}
+                          role="gridcell"
+                          data-date={day.date}
+                          tabIndex={day.date === (focusDate ?? firstDate) ? 0 : -1}
                           className={`activity-cell level-${level(day.count)}`}
                           title={dayTitle(day.count, day.date)}
+                          aria-label={dayTitle(day.count, day.date)}
+                          onFocus={() => setFocusDate(day.date)}
                         />
                       ) : (
-                        <span key={di} className="activity-cell is-empty" />
+                        <span
+                          key={di}
+                          className="activity-cell is-empty"
+                          role="presentation"
+                        />
                       )
                     )}
                   </span>

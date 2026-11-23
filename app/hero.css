@@ -7,6 +7,8 @@
   --hx-green: var(--green-text);
   --hx-orange: var(--orange-text);
   --hx-blue: var(--blue-text);
+  --hx-pink: var(--pink-text);
+  --hx-purple: var(--purple-text);
 
   /* Brand-icon colours. Not part of the text palette; used only inside the
      social glyphs so Instagram and Discord stay recognisable. */
@@ -17,7 +19,7 @@
 
   background: var(--hx-bg);
   color: var(--hx-fg);
-  padding: clamp(4.5rem, 9vw, 7rem) clamp(1.25rem, 4vw, 2rem)
+  padding: clamp(4.5rem, 9vw, 7rem) var(--shell-pad)
     clamp(3rem, 6vw, 4.5rem);
 }
 
@@ -72,10 +74,14 @@
   padding: 0.08em 0.42em;
   border: 0;
   border-radius: 0.32rem;
-  background: color-mix(in srgb, var(--hx-chip, var(--hx-fg)) 13%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--hx-chip-bg, var(--hx-chip, var(--hx-fg))) 13%,
+    transparent
+  );
   color: var(--hx-chip, var(--hx-fg));
   font: inherit;
-  font-family: var(--font-accent);
+  font-family: var(--font-hero-accent);
   font-style: italic;
   line-height: 1.5;
   white-space: nowrap;
@@ -89,7 +95,11 @@
 }
 
 .hx-chip:hover {
-  background: color-mix(in srgb, var(--hx-chip, var(--hx-fg)) 20%, transparent);
+  background: color-mix(
+    in srgb,
+    var(--hx-chip-bg, var(--hx-chip, var(--hx-fg))) 18%,
+    transparent
+  );
 }
 
 .hx-chip:active {
@@ -103,14 +113,27 @@
 
 .hx-green {
   --hx-chip: var(--hx-green);
+  --hx-chip-bg: var(--green);
 }
 
 .hx-orange {
   --hx-chip: var(--hx-orange);
+  --hx-chip-bg: var(--orange);
 }
 
 .hx-blue {
   --hx-chip: var(--hx-blue);
+  --hx-chip-bg: var(--blue);
+}
+
+.hx-pink {
+  --hx-chip: var(--hx-pink);
+  --hx-chip-bg: var(--pink);
+}
+
+.hx-purple {
+  --hx-chip: var(--hx-purple);
+  --hx-chip-bg: var(--purple);
 }
 
 .hx-neutral {
@@ -118,7 +141,8 @@
 }
 
 /* Social chips reuse the inline-chip palette so the sentence reads as one
-   family: GitHub green, Instagram orange, Discord blue. */
+   family: GitHub blue, Instagram pink, Discord purple. The fill token paints
+   the background; the matching *-text token paints the label. */
 .hx-social-chip {
   gap: 0.35em;
 }
@@ -180,7 +204,7 @@
   border-radius: var(--r-xs);
   background: var(--hx-surface);
   color: var(--hx-muted);
-  font-family: var(--font-mono);
+  font-family: var(--font-hero-mono);
   font-size: 0.8125rem;
 }
 
@@ -299,7 +323,7 @@
 
 @media (max-width: 640px) {
   .hx {
-    padding: 4.5rem 1.25rem 3rem;
+    padding: 4.5rem var(--shell-pad) 3rem;
   }
 
   .hx-inner {

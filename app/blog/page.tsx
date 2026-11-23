@@ -1,21 +1,9 @@
 import Link from "next/link";
-import { getBlogPosts } from "@/lib/notion";
-import { posts as fallbackPosts } from "@/lib/posts";
+import { formatPostDate } from "@/lib/post-summary";
+import { getSitePosts } from "@/lib/site-posts";
 
 export default async function BlogPage() {
-  const notionPosts = await getBlogPosts();
-  const posts = notionPosts.length
-    ? notionPosts
-    : fallbackPosts.map((p) => ({
-        slug: p.slug,
-        title: p.title,
-        date: p.date,
-        tags: p.tags as string[],
-        summary: p.summary,
-        readingTime: p.readingTime,
-        coverImage: null,
-        content: p.content,
-      }));
+  const posts = await getSitePosts();
 
   return (
     <main className="blog-page">
@@ -24,54 +12,62 @@ export default async function BlogPage() {
           <Link className="about-link blog-back" href="/">
             ← Back
           </Link>
-          <h1 className="section-label blog-title">Blog</h1>
+          <h1 className="blog-heading">Writing</h1>
           <p className="blog-intro">
-            Notes on building things, software and the small details.
+            {posts.length} {posts.length === 1 ? "post" : "posts"} published
           </p>
         </header>
 
-        <ol className="blog-list">
-          {posts.map((post) => (
-            <li key={post.slug} className="blog-item">
-              <Link className="blog-item-link" href={`/blog/${post.slug}`}>
-                {post.coverImage && (
-                  // eslint-disable-next-line @next/next/no-img-element
-                  <img
-                    className="blog-item-cover"
-                    src={post.coverImage}
-                    alt=""
-                    loading="lazy"
-                    decoding="async"
-                  />
-                )}
-                <div className="blog-item-meta">
-                  <time className="blog-date" dateTime={post.date}>
-                    {new Date(post.date).toLocaleDateString("en-CA", {
-                      year: "numeric",
-                      month: "short",
-                      day: "2-digit",
-                    })}
-                  </time>
-                  <span className="blog-sep">·</span>
-                  <span className="blog-reading">{post.readingTime}</span>
-                </div>
-                <h2 className="blog-item-title">{post.title}</h2>
-                {post.summary && (
-                  <p className="blog-item-summary">{post.summary}</p>
-                )}
-                {post.tags.length > 0 && (
-                  <div className="blog-tags">
-                    {post.tags.map((t) => (
-                      <span key={t} className="blog-tag">
-                        {t}
+        {posts.length ? (
+          <ul className="blog-list">
+            {posts.map((post) => (
+              <li key={post.slug} className="blog-item">
+                <Link className="blog-item-link" href={`/blog/${post.slug}`}>
+                  {post.coverImage ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      className="blog-item-cover"
+                      src={post.coverImage}
+                      alt=""
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  ) : (
+                    <span
+                      className="blog-item-cover blog-item-cover-empty"
+                      aria-hidden="true"
+                    />
+                  )}
+                  <span className="blog-item-body">
+                    <span className="blog-item-top">
+                      <span className="blog-item-title">{post.title}</span>
+                      <span className="blog-item-reading">
+                        {post.readingTime}
                       </span>
-                    ))}
-                  </div>
-                )}
-              </Link>
-            </li>
-          ))}
-        </ol>
+                    </span>
+                    {post.summary ? (
+                      <span className="blog-item-summary">{post.summary}</span>
+                    ) : null}
+                    <span className="blog-item-meta">
+                      <time dateTime={post.date}>
+                        {formatPostDate(post.date)}
+                      </time>
+                      {post.tags.length ? (
+                        <span className="blog-tags">
+                          {post.tags.slice(0, 2).map((tag) => (
+                            <span key={tag} className="blog-tag">
+                              {tag}
+                            </span>
+                          ))}
+                        </span>
+                      ) : null}
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        ) : null}
       </div>
     </main>
   );

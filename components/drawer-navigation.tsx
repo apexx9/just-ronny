@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { site } from "@/lib/content";
+import { useSpotifyAvailable } from "@/lib/spotify-status";
+import Logo from "./Logo";
 import { ThemeToggle } from "./theme-toggle";
 
 interface Props {
@@ -28,6 +31,19 @@ export default function DrawerNavigation({
 }: Props) {
   /* Phone-only overlay menu, opened from the pill's menu button. */
   const [menuOpen, setMenuOpen] = useState(false);
+  const spotifyAvailable = useSpotifyAvailable();
+  const router = useRouter();
+  const [active, setActive] = useState("work");
+
+  const navItems: { id: string; label: string; href: string }[] = [
+    { id: "work", label: "Work", href: "#work" },
+    { id: "information", label: "Information", href: "#information" },
+    ...(spotifyAvailable
+      ? [{ id: "listening", label: "Listening", href: "#listening" }]
+      : []),
+    { id: "contact", label: "Contact", href: "#contact-form" },
+    { id: "blog", label: "Blog", href: "/blog" },
+  ];
 
   const closeMenu = () => setMenuOpen(false);
   const openMenu = () => setMenuOpen(true);
@@ -55,6 +71,64 @@ export default function DrawerNavigation({
     };
   }, [menuOpen]);
 
+  /* Keyboard shortcuts: w · i · l · c · b. Never while typing, never with a
+     modifier held. Listening only participates when its card is live. */
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.metaKey || e.ctrlKey || e.altKey || e.shiftKey) return;
+      const target = e.target as HTMLElement | null;
+      if (
+        target?.closest(
+          'input, textarea, select, [contenteditable="true"], [role="textbox"]',
+        )
+      ) {
+        return;
+      }
+      const key = e.key.toLowerCase();
+      if (key === "b") {
+        e.preventDefault();
+        router.push("/blog");
+        return;
+      }
+      const destinations: Record<string, string> = {
+        w: "work",
+        i: "information",
+        c: "contact-form",
+        ...(spotifyAvailable ? { l: "listening" } : {}),
+      };
+      const id = destinations[key];
+      if (!id) return;
+      e.preventDefault();
+      closeMenu();
+      scrollToId(id);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [router, spotifyAvailable]);
+
+  /* Active nav item follows the section crossing the reading line. The
+     section ids and nav ids differ for Contact, so keep both explicit. */
+  useEffect(() => {
+    const sections = [
+      { id: "work", target: "work" },
+      { id: "information", target: "information" },
+      { id: "listening", target: "listening" },
+      { id: "contact", target: "contact-form" },
+    ];
+    const onScroll = () => {
+      const line = window.innerHeight * 0.45;
+      let current = "work";
+      for (const section of sections) {
+        const el = document.getElementById(section.target);
+        if (el && el.getBoundingClientRect().top <= line) current = section.id;
+      }
+      setActive((previous) => (previous === current ? previous : current));
+    };
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
   const scrollToShowcase = () => {
     onExpand?.();
     scrollToId("showcase");
@@ -76,23 +150,6 @@ export default function DrawerNavigation({
     scrollToId(id);
   };
 
-  const links = (
-    <>
-      <a href="#work" onClick={scrollTo("work")}>
-        Work
-      </a>
-      <a href="#information" onClick={scrollTo("information")}>
-        Information
-      </a>
-      <a href="#contact-form" onClick={scrollTo("contact-form")}>
-        Contact
-      </a>
-      <Link href="/blog" onClick={closeMenu}>
-        Blog
-      </Link>
-    </>
-  );
-
   return (
     <>
       <div
@@ -113,36 +170,39 @@ export default function DrawerNavigation({
           aria-hidden={!expanded}
         >
           <a
-            className="navigation-name personal-name"
+            className="navigation-name"
             href="#hero"
             onClick={scrollToHero}
+            aria-label={site.name}
           >
-            {site.name}
+            <Logo height={20} title={site.name} />
           </a>
 
           <div className="nav-right">
             {/* Inline links — wide screens only. */}
             <nav className="desktop-links" aria-label="Main navigation">
-              <a className="desktop-nav" href="#work" onClick={scrollTo("work")}>
-                Work
-              </a>
-              <a
-                className="desktop-nav"
-                href="#information"
-                onClick={scrollTo("information")}
-              >
-                Information
-              </a>
-              <a
-                className="desktop-nav"
-                href="#contact-form"
-                onClick={scrollTo("contact-form")}
-              >
-                Contact
-              </a>
-              <Link className="desktop-nav" href="/blog" onClick={closeMenu}>
-                Blog
-              </Link>
+              {navItems.map((item) =>
+                item.id === "blog" ? (
+                  <Link
+                    key={item.id}
+                    className="desktop-nav"
+                    href="/blog"
+                    onClick={closeMenu}
+                  >
+                    {item.label}
+                  </Link>
+                ) : (
+                  <a
+                    key={item.id}
+                    className={`desktop-nav${active === item.id ? " is-active" : ""}`}
+                    href={item.href}
+                    onClick={scrollTo(item.href.slice(1))}
+                    aria-current={active === item.id ? "true" : undefined}
+                  >
+                    {item.label}
+                  </a>
+                ),
+              )}
             </nav>
 
             <div className="nav-actions">
@@ -184,7 +244,14 @@ export default function DrawerNavigation({
           aria-label="Site navigation"
         >
           <div className="mobile-nav-head">
-            <span className="personal-name">{site.name}</span>
+            <a
+              className="mobile-nav-brand"
+              href="#hero"
+              onClick={scrollToHero}
+              aria-label={site.name}
+            >
+              <Logo height={18} title={site.name} />
+            </a>
             <button
               type="button"
               className="mobile-nav-close"
@@ -196,7 +263,23 @@ export default function DrawerNavigation({
             </button>
           </div>
           <nav className="mobile-nav-links" aria-label="Main navigation">
-            {links}
+            {navItems.map((item) =>
+              item.id === "blog" ? (
+                <Link key={item.id} href="/blog" onClick={closeMenu}>
+                  {item.label}
+                </Link>
+              ) : (
+                <a
+                  key={item.id}
+                  className={active === item.id ? "is-active" : undefined}
+                  href={item.href}
+                  onClick={scrollTo(item.href.slice(1))}
+                  aria-current={active === item.id ? "true" : undefined}
+                >
+                  {item.label}
+                </a>
+              ),
+            )}
           </nav>
           <div className="mobile-nav-foot">
             <ThemeToggle />

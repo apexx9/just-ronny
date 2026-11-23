@@ -24,17 +24,12 @@ type ThemeProviderState = {
 }
 
 const initialState: ThemeProviderState = {
-  theme: "system",
-  resolved: "light",
+  theme: "dark",
+  resolved: "dark",
   setTheme: () => null,
 }
 
 const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
-
-const FAVICONS: Record<Resolved, string> = {
-  light: "/favicon-light-v3.png",
-  dark: "/favicon-dark-v3.png",
-}
 
 const isTheme = (value: string | null): value is Theme =>
   value === "light" || value === "dark" || value === "system"
@@ -99,16 +94,8 @@ export function ThemeProvider({
   useEffect(() => {
     const root = window.document.documentElement
     root.classList.toggle("dark", resolved === "dark")
+    root.dataset.theme = resolved
     root.style.colorScheme = resolved
-
-    const href = FAVICONS[resolved]
-    document
-      .querySelectorAll<HTMLLinkElement>(
-        'link[rel="icon"], link[rel="shortcut icon"]',
-      )
-      .forEach((link) => {
-        link.href = href
-      })
   }, [resolved])
 
   const setTheme = (next: Theme) => {

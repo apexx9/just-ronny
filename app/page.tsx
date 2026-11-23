@@ -1,21 +1,14 @@
-"use client";
-
-import { useCallback, useState } from "react";
-import IntroAnimation from "@/components/intro-animation";
+import IntroMount from "@/components/intro-mount";
 import Portfolio from "@/components/portfolio";
-import { useIsClient } from "@/lib/hooks";
+import { getSitePostSummaries } from "@/lib/site-posts";
 
-export default function HomePage() {
-  const isClient = useIsClient();
-  const [introDone, setIntroDone] = useState(false);
-  const handleIntroDone = useCallback(() => setIntroDone(true), []);
-
-  if (!isClient) return <div className="boot" aria-hidden="true" />;
+export default async function HomePage() {
+  const recentPosts = await getSitePostSummaries();
 
   return (
     <>
-      <IntroAnimation onComplete={handleIntroDone} />
-      <Portfolio introDone={introDone} />
+      <IntroMount />
+      <Portfolio recentPosts={recentPosts} />
     </>
   );
 }

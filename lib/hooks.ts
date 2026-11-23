@@ -146,7 +146,11 @@ export function useFooterGradient() {
       if (reduced.matches) {
         surface.style.transform = "";
         surface.style.removeProperty("--footer-radius");
-        document.documentElement.style.removeProperty("--gradient-opacity");
+        // Keep the footer gradient visible without animating the drawer.
+        document.documentElement.style.setProperty(
+          "--gradient-opacity",
+          String(clamp(progress * 20))
+        );
         return;
       }
       surface.style.transform = `scale(${1 - progress * maxShrink})`;

@@ -55,24 +55,6 @@ const covers = [
     from: "#f3eef1",
     to: "#e3dade",
   },
-  {
-    file: "project-three.png",
-    width: 1440,
-    height: 900,
-    title: "Project Three",
-    discipline: "Backend & APIs · systems",
-    from: "#eef1ef",
-    to: "#dae2dd",
-  },
-  {
-    file: "project-four.png",
-    width: 1440,
-    height: 900,
-    title: "Project Four",
-    discipline: "Creative development · experiment",
-    from: "#f0f1f4",
-    to: "#dde0e6",
-  },
 ];
 
 function escapeXml(value) {

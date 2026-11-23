@@ -192,24 +192,42 @@ function parseExperiencePage(page: NotionAny): NotionExperience {
 const projectCoverFallbacks = [
   "/images/work/project-one.png",
   "/images/work/project-two.png",
-  "/images/work/project-three.png",
-  "/images/work/project-four.png",
 ];
+
+// Branded fallbacks for projects that do not have a Notion cover yet.
+const projectCoverBySlug: Record<string, string> = {
+  "visual-socket": "/images/work/visual-socket.png",
+  "voltar-ai": "/images/work/voltar-ai.png",
+};
+
+// Light display copy so a sparse Notion row still reads as a finished card.
+const projectDisplayBySlug: Record<
+  string,
+  { discipline: string; summary: string }
+> = {
+  "visual-socket": {
+    discipline: "Product / interface",
+    summary: "A product surface for visual work.",
+  },
+};
 
 export function toProject(p: NotionProject, index = 0): Project {
   const fallbackIndex = index % projectCoverFallbacks.length;
+  const namedCover = projectCoverBySlug[p.slug];
+  const display = projectDisplayBySlug[p.slug];
   return {
     id: p.id,
     name: p.title,
     title: p.title,
-    discipline: p.category || p.role || "",
-    summary: p.description || p.overview || "",
+    discipline: p.category || p.role || display?.discipline || "",
+    summary: p.description || p.overview || display?.summary || "",
     role: p.role,
     period: p.year || p.duration,
     href: p.liveUrl || p.githubUrl || "#",
     image: {
-      src: p.coverImage || projectCoverFallbacks[fallbackIndex],
+      src: p.coverImage || namedCover || projectCoverFallbacks[fallbackIndex],
       fallbackSrc:
+        namedCover ||
         projectCoverFallbacks[
           (fallbackIndex + 1) % projectCoverFallbacks.length
         ],

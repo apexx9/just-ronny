@@ -17,8 +17,8 @@ Accra clock; blog; 404; Light / Dark / System theme toggle. Restyle and fix thes
 - Theme: keep the toggle. **Default is Dark** so the hero language leads. Light is derived from the same tokens.
 - Drawer: keep the mechanic. In dark mode the sheet is `--surface` with a hairline top edge and a 28px top radius.
   In light mode keep the existing light sheet.
-- Fonts: **Inter** for every visible sans face (headings, lead, editorial, UI), matching degreat.co.uk.
-  **DM Mono** for metadata, **Maple Mono Italic** for small tag pills, **Darlington** for the signature only.
+- Fonts: **Inter** for the site face, matching the hero and degreat.co.uk.
+  Hero chips keep **Maple Mono Italic**, the hero footnote keeps **DM Mono**, and **Darlington** is the intro/about signature only.
   Do not add Onest or any other family.
 
 References (copy the specific quality, not the site):
@@ -41,15 +41,19 @@ add only what is missing. Dark is the default.
   --fg: #f5f5f2;  --muted: #9b9b96;  --faint: #6b6b67;   /* faint = decoration only, never text */
   /* FILLS: logo, dots, bars, chip backgrounds */
   --orange: #f2784b;  --gold: #f5c518;  --green: #3dbb78;  --blue: #7b8cff;
+  --purple: #a17be8;  --pink: #e78bb5;
   /* TEXT: coloured words and links (verified ≥ 4.5:1 on bg, surface, surface-2, also on a 13% / 18% tint of itself) */
   --orange-text: #f68a63;  --gold-text: #f5c518;  --green-text: #4cc786;  --blue-text: #9ba8ff;
+  --purple-text: #b69af5;  --pink-text: #efa3c5;
 }
 [data-theme="light"] {
   --bg: #f6f4ef;  --surface: #ffffff;  --surface-2: #efece5;
   --line: rgb(0 0 0 / 0.08);  --line-strong: rgb(0 0 0 / 0.16);
   --fg: #161616;  --muted: #5f5f5a;  --faint: #8a8a84;
   --orange: #e8541e;  --gold: #f5c518;  --green: #3dbb78;  --blue: #6b7bff;
+  --purple: #8a5bd6;  --pink: #db4f8f;
   --orange-text: #9c3509;  --gold-text: #6e5300;  --green-text: #146338;  --blue-text: #3a49bc;
+  --purple-text: #5b2a9e;  --pink-text: #a61e5c;
 }
 :root {
   --r-xs: 6px;  --r-sm: 10px;  --r-md: 14px;  --r-lg: 20px;  --r-xl: 28px;  --r-pill: 999px;
@@ -58,14 +62,16 @@ add only what is missing. Dark is the default.
 ```
 - Chips: background `color-mix(in srgb, var(--x) 13%, transparent)`, **18%** on hover (not 24%: it breaks AA).
   Chip **text** always uses `--x-text`, in both themes. Chips sit on `--bg`, `--surface` or `--surface-2` only.
+- Social chips: GitHub uses `--blue`, Instagram `--pink`, Discord `--purple` for the background tint;
+  their labels use the matching `--*-text` token.
 - The text values above were checked against WCAG AA. Still write a small script that checks every text/background
   pair in both themes (4.5:1 body, 3:1 large) after you wire them in, and fix the token, not the component.
 - `--gold` is a fill colour. Never set body text in `--gold` on paper; use `--gold-text`.
 
 ## 3. Type
-- Inter: every visible sans face — headings 700 (tracking -0.02em), lead 500–600 (like the hero), body 400–500.
-- DM Mono: dates, years, stack lines (` · ` separated), the clock, J1/J2 telemetry, keyboard hints, version string.
-- Maple Mono Italic: the small tag pills (hero chips, blog/project tags). Never for body copy or headings.
+- Inter: the site face — headings 700 (tracking -0.02em), lead 500–600 (like the hero), body 400–500, metadata.
+- Dates, years, stack lines (` · ` separated), the clock, J1/J2 telemetry, keyboard hints and version string stay in Inter.
+- Hero exception: chips use Maple Mono Italic and the footnote uses DM Mono. Do not change those two.
 - Darlington: the intro and the about signature. Nowhere else.
 - Scale (rem): 0.8125 · 0.9375 · 1.0625 · 1.25 · 1.75 · clamp(2.25, 5vw, 3.5). Body line-height 1.6, headings 1.15.
 - Sentence case. All caps only in the origin lockup and telemetry labels.
@@ -78,8 +84,7 @@ add only what is missing. Dark is the default.
 - Touch targets ≥ 44px. Focus ring `2px solid currentColor`, offset 2px, **rounded to match the element**.
 
 ## 5. NEVER
-1. No Roboto / Open Sans / Arial / Space Grotesk. Inter, DM Mono and Maple Mono Italic are the house faces;
-   Darlington is the signature only.
+1. No Roboto / Open Sans / Arial / Space Grotesk. Inter is the house face; hero chips and footnote keep their original faces; Darlington is the signature only.
 2. No purple or indigo gradients. No gradients on text or buttons. No glow, neon, blurred orbs. (The Voltar AI cover
    is a client image; leave it, but no new gradient art.)
 3. No row of three equal cards with icon + title + blurb.
@@ -102,7 +107,7 @@ add only what is missing. Dark is the default.
 - `prefers-reduced-motion`: no transforms or loops; opacity fades ≤ 150ms. Keep the existing handling and extend it.
 - Voice: first person, plain, specific, a little playful, short sentences. Position is **mechatronics engineer**
   everywhere (title, meta, OG, JSON-LD, hero, about).
-- Metadata in DM Mono, muted. One primary action per screen.
+- Metadata in Inter, muted. One primary action per screen.
 
 ## 7. Components
 Base: shadcn/ui primitives. Animated layer: EasyUI (React + Tailwind + Framer Motion). The site already has

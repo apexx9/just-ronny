@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "contrast": "node scripts/check-contrast.mjs",
+    "covers": "node scripts/generate-project-covers.mjs"
   },
   "dependencies": {
     "framer-motion": "^14.2.0",

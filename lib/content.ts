@@ -30,23 +30,19 @@ export const site = {
   name: "Aaron Nartey",
   location: "Accra, Ghana",
   timeZone: "Africa/Accra",
-  role: "Product designer & engineer",
+  role: "Mechatronics engineer",
   contactHref: "mailto:aaronnartey001@gmail.com",
-  heroTagline: "I design and build thoughtful digital products.",
-  availability: "Open to new work",
+  heroTagline:
+    "I build systems where software, electronics and motion meet — from control loops and sensor integration to the interfaces that make them usable.",
   socials: [
     { id: "github", label: "GitHub", href: "https://github.com/apexx9" },
-    {
-      id: "linkedin",
-      label: "LinkedIn",
-      href: "https://www.linkedin.com/",
-    },
-    { id: "x", label: "X", href: "https://x.com/" },
     {
       id: "instagram",
       label: "Instagram",
       href: "https://www.instagram.com/__aaro.nn",
     },
+    /* Discord, LinkedIn and X are intentionally absent until Aaron supplies
+       real profile URLs. Never ship a link to a generic social homepage. */
   ],
 
 instagram: {
@@ -63,85 +59,65 @@ instagram: {
     handle: "apexx9",
     href: "https://github.com/apexx9",
   },
+  spotify: {
+    label: "Recently played",
+    eyebrow: "Straight from Spotify",
+    note: "The last song that came through my headphones, pulled directly from my Spotify listening history.",
+  },
+  mechatronics: {
+    description:
+      "Two joints, one target, and a control loop that keeps reaching. A small study in the space where software meets the physical world.",
+  },
   services: [
+    "Mechatronics engineering",
+    "Embedded systems",
+    "CAD & prototyping",
+    "Control systems",
     "Product engineering",
-    "Web development",
-    "Interface design",
-    "Backend & APIs",
   ],
   about: {
     intro: "Hi, I'm",
-    description: "a product designer and engineer",
+    description: "a mechatronics engineer",
     experience:
-      "I design and build digital products end to end — from the first interface sketch to the systems and APIs behind it. I care about clarity, speed and the small details that make software feel considered.",
+      "I work where software, electronics and motion meet — designing mechanisms, integrating sensors and actuators, and writing the control loops that make them move. I take ideas from sketches and CAD to working prototypes, then build the interfaces and APIs that make the hardware legible to the people using it. I care about precise motion, clear feedback and the small details that make a machine feel considered.",
   },
 };
 
 export const projects: Project[] = [
   {
-    id: "project-one",
-    name: "Project One",
-    title: "Project One",
-    discipline: "Product engineering · design and build",
-    summary:
-      "A placeholder for your first case study — replace the copy and cover art when it's ready.",
+    id: "visual-socket",
+    name: "Visual Socket",
+    title: "Visual Socket",
+    discipline: "Product / interface",
+    summary: "A product surface for visual work.",
     role: "Design & development",
     period: "2026",
     href: "#",
     image: {
-      src: "/images/work/project-one.png",
-      width: 1440,
+      src: "/images/work/visual-socket.png",
+      width: 1600,
       height: 1000,
-      alt: "Project One cover",
+      alt: "Visual Socket cover",
     },
   },
   {
-    id: "project-two",
-    name: "Project Two",
-    title: "Project Two",
-    discipline: "Web application · interface design",
-    summary:
-      "A second placeholder slot. The layout adapts to whatever you put here.",
-    role: "Product design · self-initiated",
-    period: "2026",
-    href: "#",
+    id: "voltar-ai",
+    name: "Voltar AI",
+    title: "Voltar AI",
+    discipline: "AI product / web",
+    summary: "AI assistance for growing businesses.",
+    role: "Frontend developer",
+    period: "2025",
+    href: "https://voltar.ai",
     image: {
-      src: "/images/work/project-two.png",
-      width: 1440,
+      src: "/images/work/voltar-ai.png",
+      width: 1600,
       height: 1000,
-      alt: "Project Two cover",
+      alt: "Voltar AI cover",
     },
-  },
-  {
-    id: "project-three",
-    name: "Project Three",
-    title: "Project Three",
-    discipline: "Backend & APIs · systems",
-    summary: "A third placeholder slot for a project you're proud of.",
-    role: "Engineering",
-    period: "2025",
-    href: "#",
-    image: {
-      src: "/images/work/project-three.png",
-      width: 1440,
-      height: 900,
-      alt: "Project Three cover",
-    },
-  },
-  {
-    id: "project-four",
-    name: "Project Four",
-    title: "Project Four",
-    discipline: "Creative development · experiment",
-    summary: "A fourth placeholder slot, ready when you are.",
-    role: "Design & development",
-    period: "2025",
-    href: "#",
-    image: {
-      src: "/images/work/project-four.png",
-      width: 1440,
-      height: 900,
-      alt: "Project Four cover",
-    },
+    company: { label: "Dreamosoft / Voltar AI", href: "https://voltar.ai" },
+    liveUrl: "https://voltar.ai",
+    githubUrl: "https://github.com/GodsonicCodes/voltarai.git",
+    techStack: ["Next.js", "TypeScript"],
   },
 ];

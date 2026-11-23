@@ -131,7 +131,7 @@ export default function Hero() {
           </button>{" "}
           or follow along on{" "}
           <a
-            className="hx-chip hx-social-chip hx-green"
+            className="hx-chip hx-social-chip hx-blue"
             href={socialHref("github")}
             target="_blank"
             rel="noreferrer"
@@ -142,7 +142,7 @@ export default function Hero() {
           </a>
           {" and "}
           <a
-            className="hx-chip hx-social-chip hx-orange"
+            className="hx-chip hx-social-chip hx-pink"
             href={socialHref("instagram")}
             target="_blank"
             rel="noreferrer"
@@ -155,7 +155,7 @@ export default function Hero() {
             <>
               {" — "}
               <a
-                className="hx-chip hx-social-chip hx-blue"
+                className="hx-chip hx-social-chip hx-purple"
                 href={discordHref}
                 target="_blank"
                 rel="noreferrer"

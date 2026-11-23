@@ -1,6 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import SectionHead from "./section-head";
+import SectionIcon from "./section-icon";
 import { site } from "@/lib/content";
 import HoverCard from "./hover-card";
 import InstagramCard from "./instagram-card";
@@ -70,15 +72,15 @@ export default function ContactSection() {
     <section
       data-analytics-section="contact-form"
       id="contact-form"
-      className="contact-form-section"
+      className="middle-section contact-form-section"
       aria-labelledby="contact-heading"
     >
-      <h2 className="section-label" id="contact-heading">
-        Contact
-      </h2>
-      <p className="contact-form-intro">
-        Have something in mind? Say hi — I&apos;ll get back to you.
-      </p>
+      <SectionHead
+        title="Contact"
+        id="contact-heading"
+        icon={<SectionIcon name="mail" />}
+        lead="Have something in mind? Say hi — I'll get back to you."
+      />
 
       <form onSubmit={onSubmit} className="contact-form" noValidate>
         <div className="form-row">
