@@ -72,7 +72,6 @@ export default function OpenGraphImage() {
             alignItems: "center",
           }}
         >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={markSrc} width={208} height={64} alt="APX" />
           <div
             style={{
