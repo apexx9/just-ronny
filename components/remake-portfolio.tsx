@@ -3,7 +3,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
-import { useReducedMotion } from "framer-motion";
 import PillNavigation from "@/components/ui/pill-navigation";
 import ActivitySection from "@/components/activity-section";
 import RoboticArm from "@/components/robotic-arm";
@@ -100,12 +99,7 @@ function ContactForm() {
 }
 
 export default function RemakePortfolio({ recentPosts }: { recentPosts: PostSummary[] }) {
-  const reducedMotion = useReducedMotion();
   const [menuOpen, setMenuOpen] = useState(false);
-
-  const reveal = reducedMotion
-    ? { initial: false as const, whileInView: undefined }
-    : { initial: { opacity: 0, y: 18 }, whileInView: { opacity: 1, y: 0 } };
 
   return (
     <main className="site-shell">

@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { motion, AnimatePresence, useReducedMotion, type HTMLMotionProps } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { motionTransitions } from '../../lib/motion-tokens';
 
 export interface PillSubItem { id: string; label: string; badge?: string; }
 export interface PillNavigationItem { id: string; label: string; children?: PillSubItem[]; }
-export interface PillNavigationProps extends Omit<HTMLMotionProps<'div'>, 'onChange'> {
+export interface PillNavigationProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
   items?: PillNavigationItem[];
   defaultValue?: string;
   defaultSubValue?: string;
@@ -22,7 +22,7 @@ const defaultItems: PillNavigationItem[] = [
 ];
 
 export const PillNavigation: React.FC<PillNavigationProps> = ({
-  items = defaultItems, defaultValue, defaultSubValue, onChange, className, ...props
+  items = defaultItems, defaultValue, defaultSubValue, onChange, className
 }) => {
   const [activeId, setActiveId] = useState(defaultValue || items[0]?.id);
   const [activeSubId, setActiveSubId] = useState<string | undefined>(defaultSubValue);
@@ -63,7 +63,7 @@ export const PillNavigation: React.FC<PillNavigationProps> = ({
   return (
     <motion.div ref={containerRef} layout={!reducedMotion} transition={motionTransitions.springGentle}
       className={['inline-flex flex-col items-center gap-2 select-none', className].filter(Boolean).join(' ')}
-      role="navigation" aria-label="Pill navigation" onKeyDown={handleKeyDown} tabIndex={0} {...(props as any)}>
+      role="navigation" aria-label="Pill navigation" onKeyDown={handleKeyDown} tabIndex={0}>
       <div role="tablist" aria-label="Portfolio sections" className="inline-flex items-center rounded-full border border-[#1F1F1F] bg-[#050505] p-1 shadow-inner">
         {items.map((item) => {
           const active = item.id === activeId;
@@ -86,7 +86,7 @@ export const PillNavigation: React.FC<PillNavigationProps> = ({
           exit={reducedMotion ? { opacity: 0 } : { opacity: 0, y: -4, scale: 0.96 }}
           transition={motionTransitions.springGentle} role="menu" aria-label={`${activeItem.label} submenu`}
           className="inline-flex items-center gap-1 rounded-full border border-[#171717] bg-[#0B0B0B]/90 p-1 shadow-[0_8px_20px_rgba(0,0,0,0.35)]">
-          {activeItem.children?.map((item) => <motion.button key={item.id} type="button" role="menuitem"
+          {activeItem.children?.map((item) => <motion.button key={item.id} type="button" role="menuitemradio"
             aria-checked={item.id === activeSubId} whileTap={reducedMotion ? undefined : { scale: 0.95 }}
             onClick={() => selectSub(item.id)} className="relative flex min-h-7 items-center rounded-full px-3 py-1 text-[11px] font-medium text-[#A1A1A1]">
             <span className="relative z-10">{item.label}</span>
