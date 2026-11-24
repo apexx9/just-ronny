@@ -83,7 +83,7 @@ img { display: block; max-width: 100%; }
 .engineering-copy > p { color: var(--muted); font-size: 14px; line-height: 1.85; max-width: 430px; margin: 32px 0; }
 .engineering-tags { display: flex; flex-wrap: wrap; gap: 18px; color: var(--faint); }
 .engineering-tags span + span::before { content: "·"; margin-right: 18px; color: var(--accent); }
-.arm-stage { border: 1px solid var(--line); background: radial-gradient(ellipse at 50% 45%, #1b211b 0%, #101312 60%); padding: 18px 22px 14px; min-width: 0; }
+.arm-stage { border: 1px solid var(--line); background: #101312; padding: 18px 22px 14px; min-width: 0; }
 .arm-stage-top, .arm-stage-bottom { display: flex; justify-content: space-between; gap: 12px; font-size: 9px; color: var(--faint); }
 .arm-stage .robotic-arm { width: 100%; margin: 22px auto 12px; }
 .robotic-arm svg { width: 100%; height: auto; overflow: visible; }
