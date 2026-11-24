@@ -190,7 +190,7 @@ export default function RemakePortfolio({ recentPosts }: { recentPosts: PostSumm
         <ContactForm />
       </section>
 
-      <footer className="site-footer"><Link href="/" className="wordmark">APX<span>®</span></Link><span>MECHATRONICS ENGINEER · ACCRA, GHANA</span><span>© {new Date().getFullYear()} AARON NARTEY</span><a href="#top">BACK TO TOP ↑</a></footer>
+      <footer className="site-footer"><Link href="/" className="wordmark">APX<span>®</span></Link><span>MECHATRONICS ENGINEER · ACCRA, GHANA</span><span>© 2026 AARON NARTEY</span><a href="#top">BACK TO TOP ↑</a></footer>
     </main>
   );
 }
