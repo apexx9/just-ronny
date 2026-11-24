@@ -3,7 +3,6 @@
 import React, { useState, useRef } from 'react';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
-import { cn } from '../../lib/utils';
 import { motionTransitions } from '../../lib/motion-tokens';
 
 export interface PillSubItem { id: string; label: string; badge?: string; }
