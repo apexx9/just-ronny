@@ -3,11 +3,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, type FormEvent } from "react";
-import { motion, useReducedMotion } from "framer-motion";
+import { useReducedMotion } from "framer-motion";
 import PillNavigation from "@/components/ui/pill-navigation";
 import ActivitySection from "@/components/activity-section";
 import RoboticArm from "@/components/robotic-arm";
-import { projects, site } from "@/lib/content";
+import { projects } from "@/lib/content";
 import type { PostSummary } from "@/lib/post-summary";
 import type { RecentTrack } from "@/lib/spotify";
 
