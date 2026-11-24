@@ -1,13 +1,13 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion, type HTMLMotionProps } from 'framer-motion';
 import { ChevronDown } from 'lucide-react';
 import { motionTransitions } from '../../lib/motion-tokens';
 
 export interface PillSubItem { id: string; label: string; badge?: string; }
 export interface PillNavigationItem { id: string; label: string; children?: PillSubItem[]; }
-export interface PillNavigationProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+export interface PillNavigationProps extends Omit<HTMLMotionProps<'div'>, 'onChange'> {
   items?: PillNavigationItem[];
   defaultValue?: string;
   defaultSubValue?: string;
