@@ -63,7 +63,7 @@ export const PillNavigation: React.FC<PillNavigationProps> = ({
   return (
     <motion.div ref={containerRef} layout={!reducedMotion} transition={motionTransitions.springGentle}
       className={['inline-flex flex-col items-center gap-2 select-none', className].filter(Boolean).join(' ')}
-      role="navigation" aria-label="Pill navigation" onKeyDown={handleKeyDown} tabIndex={0} {...props}>
+      role="navigation" aria-label="Pill navigation" onKeyDown={handleKeyDown} tabIndex={0} {...(props as any)}>
       <div role="tablist" aria-label="Portfolio sections" className="inline-flex items-center rounded-full border border-[#1F1F1F] bg-[#050505] p-1 shadow-inner">
         {items.map((item) => {
           const active = item.id === activeId;
