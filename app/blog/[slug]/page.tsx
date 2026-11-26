@@ -1,19 +1,44 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getBlogPostBySlug, getBlogPosts, type BlogPost } from "@/lib/notion";
-import { posts as fallbackPosts } from "@/lib/posts";
+import { getBlogPostBySlug, type BlogPost } from "@/lib/notion";
 
-/* The post body is `use cache` and every slug is prerendered via
-   generateStaticParams, so navigations serve static HTML immediately.
-   `params` is still awaited (required in Next 16), which the dev-time
-   instant-navigation validator flags — opt this segment out. */
 export const instant = false;
 
-export async function generateStaticParams() {
-  const [notionPosts] = await Promise.all([getBlogPosts()]);
-  const slugs = new Set(notionPosts.map((p) => p.slug));
-  for (const p of fallbackPosts) slugs.add(p.slug);
-  return Array.from(slugs).map((slug) => ({ slug }));
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const post = await getBlogPostBySlug(slug);
+  if (!post) return {};
+
+  return {
+    title: post.title,
+    description: post.summary,
+    openGraph: {
+      type: "article",
+      title: post.title,
+      description: post.summary,
+      publishedTime: post.date || undefined,
+      tags: post.tags,
+      images: [
+        {
+          url: `/blog/${slug}/opengraph-image`,
+          width: 1200,
+          height: 630,
+          alt: post.title,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.summary,
+      images: [`/blog/${slug}/opengraph-image`],
+    },
+  };
 }
 
 function escapeHtml(text: string): string {
@@ -40,25 +65,7 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-
-  const notion = await getBlogPostBySlug(slug);
-  let post: BlogPost | null = notion;
-
-  if (!post) {
-    const fb = fallbackPosts.find((p) => p.slug === slug);
-    if (fb) {
-      post = {
-        slug: fb.slug,
-        title: fb.title,
-        date: fb.date,
-        tags: fb.tags as string[],
-        summary: fb.summary,
-        readingTime: fb.readingTime,
-        coverImage: null,
-        content: toHtml(fb.content),
-      };
-    }
-  }
+  const post: BlogPost | null = await getBlogPostBySlug(slug);
 
   if (!post) notFound();
 

@@ -1,21 +1,14 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getBlogPosts } from "@/lib/notion";
-import { posts as fallbackPosts } from "@/lib/posts";
+
+export const metadata: Metadata = {
+  title: "Blog",
+  description: "Notes on software, mechatronics, embedded systems, and building connected products.",
+};
 
 export default async function BlogPage() {
-  const notionPosts = await getBlogPosts();
-  const posts = notionPosts.length
-    ? notionPosts
-    : fallbackPosts.map((p) => ({
-        slug: p.slug,
-        title: p.title,
-        date: p.date,
-        tags: p.tags as string[],
-        summary: p.summary,
-        readingTime: p.readingTime,
-        coverImage: null,
-        content: p.content,
-      }));
+  const posts = await getBlogPosts();
 
   return (
     <main className="blog-page">

@@ -189,17 +189,10 @@ function parseExperiencePage(page: NotionAny): NotionExperience {
 
 // ─── Notion → UI project adapter ─────────────────────
 
-const projectCoverFallbacks = [
-  "/images/work/project-one.png",
-  "/images/work/project-two.png",
-  "/images/work/project-three.png",
-  "/images/work/project-four.png",
-];
-
-export function toProject(p: NotionProject, index = 0): Project {
-  const fallbackIndex = index % projectCoverFallbacks.length;
+export function toProject(p: NotionProject): Project {
   return {
     id: p.id,
+    slug: p.slug,
     name: p.title,
     title: p.title,
     discipline: p.category || p.role || "",
@@ -208,11 +201,7 @@ export function toProject(p: NotionProject, index = 0): Project {
     period: p.year || p.duration,
     href: p.liveUrl || p.githubUrl || "#",
     image: {
-      src: p.coverImage || projectCoverFallbacks[fallbackIndex],
-      fallbackSrc:
-        projectCoverFallbacks[
-          (fallbackIndex + 1) % projectCoverFallbacks.length
-        ],
+      src: p.coverImage || "",
       width: 1600,
       height: 1000,
       alt: `${p.title} cover`,
@@ -285,7 +274,7 @@ export async function getProjects(): Promise<Project[]> {
     });
     return results
       .map(parseProjectPage)
-      .map((project, index) => toProject(project, index));
+      .map((project) => toProject(project));
   } catch (error) {
     console.error("Error fetching projects:", error);
     return [];

@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 import { site } from "@/lib/content";
-import HoverCard from "./hover-card";
-import InstagramCard from "./instagram-card";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -178,19 +176,14 @@ export default function ContactSection() {
             <span className="form-alt-sep" aria-hidden="true">
               ·
             </span>
-            <HoverCard
-              content={<InstagramCard />}
-              className="instagram-hover-surface"
+            <a
+              className="about-link form-mailto"
+              href={site.instagram.href}
+              target="_blank"
+              rel="noopener noreferrer"
             >
-              <a
-                className="about-link form-mailto"
-                href={site.instagram.href}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                or say hi on Instagram <span aria-hidden="true">↗</span>
-              </a>
-            </HoverCard>
+              or say hi on Instagram <span aria-hidden="true">↗</span>
+            </a>
           </span>
         </div>
 

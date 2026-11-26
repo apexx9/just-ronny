@@ -3,8 +3,6 @@
 
 import { useEffect, useState } from "react";
 import { site } from "@/lib/content";
-import HoverCard from "./hover-card";
-import InstagramCard from "./instagram-card";
 
 const timeFmt = new Intl.DateTimeFormat("en-CA", {
   timeZone: site.timeZone,
@@ -69,16 +67,7 @@ export default function ContactFooter() {
                   className="footer-social-item"
                 >
                   {" "}
-                  {social.id === "instagram" ? (
-                    <HoverCard
-                      content={<InstagramCard />}
-                      className="instagram-hover-surface"
-                    >
-                      {link}
-                    </HoverCard>
-                  ) : (
-                    link
-                  )}
+                  {link}
                 </span>
               );
             })}{" "}

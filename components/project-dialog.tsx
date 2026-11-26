@@ -235,6 +235,14 @@ export default function ProjectDialog({ project, onClose }: Props) {
                   View source ↗
                 </a>
               )}
+              {project.slug && (
+                <a
+                  className="pill-button"
+                  href={`/projects/${project.slug}`}
+                >
+                  Open shareable page ↗
+                </a>
+              )}
             </div>
           </article>
         </div>

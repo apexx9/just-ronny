@@ -7,9 +7,17 @@ interface Props {
 }
 
 export default function ProjectImage({ project, loading = "lazy" }: Props) {
-  const fallbackSrc =
-    project.image.fallbackSrc ?? "/images/work/project-one.png";
   const [src, setSrc] = useState(project.image.src);
+
+  if (!src) {
+    return (
+      <div
+        className="project-cover-placeholder"
+        role="img"
+        aria-label={`${project.title} cover`}
+      />
+    );
+  }
 
   return (
     // eslint-disable-next-line @next/next/no-img-element
@@ -20,9 +28,7 @@ export default function ProjectImage({ project, loading = "lazy" }: Props) {
       loading={loading}
       decoding="async"
       alt={project.image.alt}
-      onError={() => {
-        if (src !== fallbackSrc) setSrc(fallbackSrc);
-      }}
+      onError={() => setSrc("")}
     />
   );
 }

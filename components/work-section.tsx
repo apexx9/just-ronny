@@ -5,11 +5,11 @@ import AboutSection from "./about-section";
 import ActivitySection from "./activity-section";
 import ProjectCard from "./project-card";
 import ProjectDialog from "./project-dialog";
-import { projects as fallbackProjects, type Project } from "@/lib/content";
+import type { Project } from "@/lib/content";
 
 export default function WorkSection() {
   const [open, setOpen] = useState<Project | null>(null);
-  const [projects, setProjects] = useState<Project[]>(fallbackProjects);
+  const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
     let cancelled = false;

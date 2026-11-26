@@ -12,7 +12,7 @@ const SITE_HOST = (() => {
 })();
 
 export const alt =
-  "Aaron Nartey — Software Engineer and Creative Developer in Accra, Ghana";
+  "Aaron Nartey — Software Developer and Mechatronics Engineer in Accra, Ghana";
 
 export const size = {
   width: 1200,
@@ -69,7 +69,7 @@ export default function OpenGraphImage() {
               letterSpacing: "0.4px",
             }}
           >
-            Software engineer &amp; creative developer
+            Software developer &amp; mechatronics engineer
           </div>
 
           <div
@@ -105,7 +105,7 @@ export default function OpenGraphImage() {
               maxWidth: 620,
             }}
           >
-            Building thoughtful digital products and software.
+            Building software and intelligent physical systems.
           </div>
         </div>
 
@@ -123,7 +123,7 @@ export default function OpenGraphImage() {
             color: "#828b8c",
           }}
         >
-          <span>Software · Products · Systems</span>
+          <span>Software · Electronics · Automation</span>
           <span>{SITE_HOST} &#8599;</span>
         </div>
       </div>
