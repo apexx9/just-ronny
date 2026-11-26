@@ -764,6 +764,16 @@ a:focus-visible {
   display: block;
 }
 
+.latest-blog-section {
+  padding: 28px 0 56px;
+  border-bottom: 1px solid var(--separator);
+}
+
+.latest-blog-section .nc-grid {
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  gap: 24px;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .project-card:hover {
     transform: perspective(1400px) rotateX(var(--tilt-x, 0deg))
@@ -1571,20 +1581,6 @@ a:focus-visible {
 .blog-title { margin-bottom: 0; }
 .blog-intro { color: var(--editorial); }
 .blog-back { justify-self: start; margin-bottom: 4px; }
-.blog-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 0; }
-.blog-item {
-  border-top: 1px solid var(--separator);
-}
-.blog-item:last-child { border-bottom: 1px solid var(--separator); }
-.blog-item-link {
-  display: grid;
-  gap: 8px;
-  padding: 20px 0;
-  text-decoration: none;
-  color: inherit;
-  transition: background-color 0.15s;
-}
-.blog-item-cover,
 .blog-post-cover {
   display: block;
   width: 100%;
@@ -1593,26 +1589,8 @@ a:focus-visible {
   object-fit: cover;
   border-radius: 8px;
   border: 1px solid var(--separator);
+  margin-bottom: 24px;
 }
-.blog-item-cover { margin-bottom: 8px; }
-.blog-post-cover { margin-bottom: 24px; }
-.blog-item-meta {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12px;
-  color: var(--muted-foreground);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-}
-.blog-sep { color: var(--hairline); }
-.blog-item-title {
-  font-size: 16px;
-  line-height: 1.4;
-  font-weight: 500;
-  color: var(--foreground);
-}
-.blog-item-summary { color: var(--editorial); }
 .blog-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .blog-tag {
   font-size: 11px;
@@ -1700,6 +1678,428 @@ a:focus-visible {
   .blog-article a:hover { text-decoration-color: currentColor; }
 }
 .blog-post-footer { margin-top: 32px; }
+
+/* ============================================================
+   CARDS: blog cards, post extras, case-study bits
+   components/blog-card.tsx · share-links.tsx · app/blog · app/projects
+   Built only from the tokens above, so light/dark just work.
+   ============================================================ */
+:root {
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nc-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.nc-section-head .section-label { margin: 0; }
+
+/* The wrapper is a size container so phones can switch to compact rows
+   based on the real column width, not the viewport. */
+.nc-grid-wrap {
+  container-type: inline-size;
+  container-name: nc-grid;
+}
+
+.nc-grid {
+  display: grid;
+  gap: 36px 24px;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+}
+
+/* One post leads, the rest support. Identical boxes read as a template. */
+.nc-card[data-variant="featured"] { grid-column: 1 / -1; }
+
+/* ── Card ─────────────────────────────────────────────────── */
+.nc-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  min-width: 0;
+  color: var(--foreground);
+}
+
+.nc-media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 12px;
+  background: var(--subtle);
+  isolation: isolate;
+  transition: transform 0.45s var(--ease-out);
+}
+.nc-card[data-variant="featured"] .nc-media { aspect-ratio: 16 / 9; }
+
+/* Hairline ring above the image so the edge stays crisp on any cover. */
+.nc-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px var(--separator);
+  pointer-events: none;
+  transition: box-shadow 0.3s ease;
+}
+
+.nc-cover {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.9s var(--ease-out);
+}
+
+/* No cover: typography in your signature font instead of a stock gradient. */
+.nc-placeholder {
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 16px;
+  background-image: radial-gradient(var(--separator) 1px, transparent 1px);
+  background-size: 14px 14px;
+}
+.nc-placeholder-tag {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.nc-placeholder-mark {
+  align-self: flex-end;
+  color: var(--editorial);
+  font-family: var(--font-signature), cursive;
+  font-size: clamp(44px, 7vw, 72px);
+  letter-spacing: -0.08em;
+  line-height: 0.8;
+  transition: transform 0.7s var(--ease-out);
+}
+
+.nc-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 999px;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 13px;
+  box-shadow: 0 0 0 1px var(--separator);
+  opacity: 0;
+  transform: translate(-6px, 6px) scale(0.9);
+  transition: opacity 0.25s ease, transform 0.4s var(--ease-out);
+}
+
+.nc-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.nc-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+}
+
+.nc-title {
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+  text-wrap: balance;
+}
+.nc-card[data-variant="featured"] .nc-title {
+  font-size: clamp(20px, 4.6vw, 24px);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+/* Underline that draws itself in, and survives line wraps. */
+.nc-link {
+  color: inherit;
+  text-decoration: none;
+  padding-bottom: 2px;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  transition: background-size 0.45s var(--ease-out);
+}
+/* Stretched link: the whole card is one target, but a screen reader hears only the title. */
+.nc-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+}
+
+.nc-summary {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--editorial);
+  font-size: 14px;
+  line-height: 1.6;
+  text-wrap: pretty;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+}
+.nc-card[data-variant="featured"] .nc-summary { -webkit-line-clamp: 4; }
+
+.nc-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 2px;
+  list-style: none;
+}
+.nc-tags li {
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 2px 6px;
+  border-radius: 999px;
+  background: var(--muted);
+  color: var(--muted-foreground);
+  border: 1px solid var(--separator);
+}
+
+/* Keyboard parity: every hover effect has a focus twin. */
+.nc-link:focus-visible { outline: none; }
+.nc-card:has(.nc-link:focus-visible) .nc-media {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+}
+.nc-card:has(.nc-link:focus-visible) .nc-link { background-size: 100% 1px; }
+.nc-card:has(.nc-link:focus-visible) .nc-badge { opacity: 1; transform: none; }
+
+.nc-card:active .nc-media { transform: scale(0.985); }
+
 @media (hover: hover) and (pointer: fine) {
-  .blog-item-link:hover { background: var(--faint); }
+  .nc-card:hover .nc-link { background-size: 100% 1px; }
+  .nc-card:hover .nc-cover { transform: scale(1.035); }
+  .nc-card:hover .nc-placeholder-mark { transform: translate(-3px, -3px) rotate(-3deg); }
+  .nc-card:hover .nc-media::after { box-shadow: inset 0 0 0 1px var(--hairline); }
+  .nc-card:hover .nc-badge { opacity: 1; transform: none; }
+}
+
+/* Phones: supporting cards become compact thumbnail rows (the featured one stays big). */
+@container nc-grid (max-width: 463px) {
+  .nc-card:not([data-variant="featured"]) {
+    display: grid;
+    grid-template-columns: 34% minmax(0, 1fr);
+    gap: 14px;
+    align-items: start;
+  }
+  .nc-card:not([data-variant="featured"]) .nc-media { aspect-ratio: 1 / 1; }
+  .nc-card:not([data-variant="featured"]) .nc-summary { -webkit-line-clamp: 2; }
+  .nc-card:not([data-variant="featured"]) .nc-badge { display: none; }
+  .nc-card:not([data-variant="featured"]) .nc-tags { display: none; }
+}
+
+/* ── Skeleton (same footprint as a real card) ─────────────── */
+.nc-skeleton {
+  background: linear-gradient(
+    100deg,
+    var(--subtle) 30%,
+    color-mix(in srgb, var(--subtle) 55%, var(--background)) 50%,
+    var(--subtle) 70%
+  );
+  background-size: 240% 100%;
+}
+.nc-skeleton-line { height: 12px; border-radius: 6px; }
+.nc-skeleton-title { height: 18px; width: 78%; }
+
+/* ── Motion (opt-in only) ─────────────────────────────────── */
+@keyframes nc-rise {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes nc-shimmer {
+  from { background-position: 100% 0; }
+  to   { background-position: -100% 0; }
+}
+@keyframes nc-grow {
+  from { transform: scaleX(0); }
+  to   { transform: scaleX(1); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .nc-reveal {
+    animation: nc-rise 0.6s var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * 70ms);
+  }
+  .nc-skeleton { animation: nc-shimmer 1.6s ease-in-out infinite; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .nc-media, .nc-cover, .nc-badge, .nc-link, .nc-placeholder-mark,
+  .nc-chip, .nc-next, .nc-next-arrow { transition: none; }
+  .nc-card:hover .nc-cover,
+  .nc-card:active .nc-media { transform: none; }
+}
+
+/* ── Post: progress bar, meta, summary, share, keep-reading ─ */
+/* Pure CSS reading progress; browsers without scroll-driven animations never show it. */
+.nc-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 50;
+  height: 2px;
+  background: var(--foreground);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  pointer-events: none;
+}
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .nc-progress {
+      animation: nc-grow linear both;
+      animation-timeline: scroll(root block);
+    }
+  }
+}
+
+.nc-post-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+  font-variant-numeric: tabular-nums;
+}
+.nc-post-summary {
+  max-width: 56ch;
+  color: var(--editorial);
+  font-size: 16px;
+  line-height: 1.6;
+  text-wrap: pretty;
+}
+
+.nc-share {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 40px;
+  padding-top: 20px;
+  border-top: 1px solid var(--separator);
+}
+.nc-share-label {
+  margin-right: 4px;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+/* Same pill language as .pill-button so it feels native to the site. */
+.nc-chip {
+  display: inline-flex;
+  align-items: center;
+  height: 30px;
+  padding: 0 12px;
+  border-radius: 999px;
+  background: var(--muted);
+  color: var(--foreground);
+  font-size: 14px;
+  line-height: 21px;
+  text-decoration: none;
+  white-space: nowrap;
+  transition: transform 0.15s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.15s;
+}
+.nc-chip:active { transform: scale(0.95); background: var(--muted-active); }
+@media (hover: hover) and (pointer: fine) {
+  .nc-chip:hover { background: var(--muted-hover); }
+}
+
+.nc-more { margin-top: 64px; }
+
+/* ── Case study (project page) ────────────────────────────── */
+.nc-facts {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 48px;
+  padding: 16px 0;
+  border-block: 1px solid var(--separator);
+  font-size: 12px;
+  line-height: 20px;
+}
+.nc-facts > div { display: grid; gap: 2px; }
+.nc-facts dt { color: var(--tertiary); }
+.nc-facts dd { color: var(--editorial); }
+.nc-facts a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: var(--separator);
+  text-underline-offset: 3px;
+  transition: text-decoration-color 0.2s;
+}
+@media (hover: hover) and (pointer: fine) {
+  .nc-facts a:hover { text-decoration-color: currentColor; }
+}
+
+.nc-case { counter-reset: nc-section; gap: 32px; }
+.nc-case > section { counter-increment: nc-section; display: grid; gap: 8px; }
+.nc-case > section > h2::before {
+  content: counter(nc-section, decimal-leading-zero);
+  display: block;
+  margin-bottom: 4px;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  color: var(--tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.nc-next {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 48px;
+  padding: 20px 0;
+  border-block: 1px solid var(--separator);
+  color: var(--foreground);
+  text-decoration: none;
+  transition: padding 0.4s var(--ease-out);
+}
+.nc-next-label {
+  display: block;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+.nc-next-title {
+  display: block;
+  margin-top: 2px;
+  font-size: 17px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.nc-next-arrow {
+  font-size: 18px;
+  transition: transform 0.4s var(--ease-out);
+}
+@media (hover: hover) and (pointer: fine) {
+  .nc-next:hover { padding-inline: 8px; }
+  .nc-next:hover .nc-next-arrow { transform: translate(3px, -3px); }
 }

@@ -4,6 +4,8 @@ import { Geist } from "next/font/google";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+import { JsonLd } from "@/components/json-ld";
+import { personId, siteConfig, websiteId } from "@/lib/site";
 
 /* ------------------------------------------------------------------ */
 /*  Fonts                                                             */
@@ -46,35 +48,6 @@ const signature = localFont({
 });
 
 /* ------------------------------------------------------------------ */
-/*  Site config                                                       */
-/* ------------------------------------------------------------------ */
-
-const siteConfig = {
-  name: "Aaron Nartey",
-  title: "Aaron Nartey — Software Developer & Mechatronics Engineer",
-  description:
-    "I'm Aaron Nartey, a software developer and mechatronics engineer from Accra, Ghana. I build software, embedded systems, automation, and connected products.",
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://ronny.tech",
-  email: "aaronnartey001@gmail.com",
-  locale: "en_GH",
-  keywords: [
-    "Aaron Nartey",
-    "Ronny",
-    "Software Engineer",
-    "Software Developer",
-    "Mechatronics Engineer",
-    "Embedded Systems",
-    "Automation",
-    "IoT",
-    "Next.js",
-    "NestJS",
-    "TypeScript",
-    "Ghana",
-    "Accra",
-  ],
-};
-
-/* ------------------------------------------------------------------ */
 /*  Metadata                                                          */
 /* ------------------------------------------------------------------ */
 
@@ -94,7 +67,18 @@ export const metadata: Metadata = {
   publisher: siteConfig.name,
   category: "technology",
 
-  alternates: { canonical: "/" },
+  /* NOTE: `alternates.canonical: "/"` used to live here. Child routes inherit
+     it, which told Google that /blog/* and /projects/* were all duplicates of
+     the homepage. Each page now sets its own canonical instead. For the home
+     page add:  export const metadata = { alternates: { canonical: "/" } }  */
+  alternates: {
+    types: { "application/rss+xml": "/blog/feed.xml" },
+  },
+
+  /* Google Search Console: paste the token into NEXT_PUBLIC_GSC_VERIFICATION. */
+  verification: process.env.NEXT_PUBLIC_GSC_VERIFICATION
+    ? { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION }
+    : undefined,
 
   openGraph: {
     type: "website",
@@ -170,6 +154,44 @@ export const viewport: Viewport = {
   ],
 };
 
+/* ------------------------------------------------------------------ */
+/*  Structured data: tells Google who you are and what this site is   */
+/* ------------------------------------------------------------------ */
+
+const siteJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": personId,
+      name: siteConfig.name,
+      alternateName: siteConfig.alternateName,
+      url: siteConfig.url,
+      email: `mailto:${siteConfig.email}`,
+      jobTitle: siteConfig.jobTitle,
+      description: siteConfig.description,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: siteConfig.city,
+        addressCountry: siteConfig.countryCode,
+      },
+      knowsAbout: siteConfig.knowsAbout,
+      mainEntityOfPage: { "@id": websiteId },
+      ...(siteConfig.sameAs.length ? { sameAs: siteConfig.sameAs } : {}),
+    },
+    {
+      "@type": "WebSite",
+      "@id": websiteId,
+      url: siteConfig.url,
+      name: siteConfig.name,
+      alternateName: siteConfig.alternateName,
+      description: siteConfig.description,
+      inLanguage: "en",
+      publisher: { "@id": personId },
+    },
+  ],
+};
+
 /* Runs before first paint so <html> already carries the right theme class.
    Without this the app flashes light for a frame on every dark-mode load. */
 const themeInitScript = `(function(){try{var t=localStorage.getItem("theme");var d=t==="dark"||(t!=="light"&&window.matchMedia("(prefers-color-scheme: dark)").matches);var e=document.documentElement;e.classList.toggle("dark",d);e.style.colorScheme=d?"dark":"light";}catch(e){}})();`;
@@ -191,7 +213,13 @@ export default function RootLayout({
       style={{ backgroundColor: "var(--background)" }}
       suppressHydrationWarning
     >
-      <body><script dangerouslySetInnerHTML={{ __html: themeInitScript }} /><ThemeProvider defaultTheme="system" storageKey="theme">{children}</ThemeProvider></body>
+      <body>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <JsonLd data={siteJsonLd} />
+        <ThemeProvider defaultTheme="system" storageKey="theme">
+          {children}
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

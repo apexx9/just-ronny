@@ -1,21 +1,10 @@
-"use client";
+import type { Metadata } from "next";
+import HomePageClient from "@/components/home-page-client";
 
-import { useCallback, useState } from "react";
-import IntroAnimation from "@/components/intro-animation";
-import Portfolio from "@/components/portfolio";
-import { useIsClient } from "@/lib/hooks";
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function HomePage() {
-  const isClient = useIsClient();
-  const [introDone, setIntroDone] = useState(false);
-  const handleIntroDone = useCallback(() => setIntroDone(true), []);
-
-  if (!isClient) return <div className="boot" aria-hidden="true" />;
-
-  return (
-    <>
-      <IntroAnimation onComplete={handleIntroDone} />
-      <Portfolio introDone={introDone} />
-    </>
-  );
+  return <HomePageClient />;
 }

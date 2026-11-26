@@ -5,6 +5,7 @@ import AboutSection from "./about-section";
 import ActivitySection from "./activity-section";
 import ProjectCard from "./project-card";
 import ProjectDialog from "./project-dialog";
+import LatestBlogSection from "./latest-blog-section";
 import type { Project } from "@/lib/content";
 
 export default function WorkSection() {
@@ -43,6 +44,7 @@ export default function WorkSection() {
         </div>
       </section>
 
+      <LatestBlogSection />
       <AboutSection />
       <ActivitySection />
 
